@@ -4,3 +4,12 @@
 *.jar
 *.war
 *.ear
+
+*.properties
+*.iml
+.idea
+bin
+gen
+out
+build.xml
+proguard-project.txt
