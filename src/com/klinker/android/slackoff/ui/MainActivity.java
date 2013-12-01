@@ -61,11 +61,11 @@ public class MainActivity extends Activity {
 
         if (portrait) {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) folderList.getLayoutParams();
-            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48 * (folderAdapter.getCount()) - 35, getResources().getDisplayMetrics());
+            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48 * (folderAdapter.getCount()) + 32, getResources().getDisplayMetrics());
             folderList.setLayoutParams(params);
 
             params = (RelativeLayout.LayoutParams) fileList.getLayoutParams();
-            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48 * (fileAdapter.getCount()) - 35, getResources().getDisplayMetrics());
+            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48 * (fileAdapter.getCount()) + 28, getResources().getDisplayMetrics());
             fileList.setLayoutParams(params);
         }
 
