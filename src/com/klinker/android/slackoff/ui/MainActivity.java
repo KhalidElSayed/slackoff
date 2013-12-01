@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
             folderList.setLayoutParams(params);
 
             params = (RelativeLayout.LayoutParams) fileList.getLayoutParams();
-            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48 * (fileAdapter.getCount()) + 28, getResources().getDisplayMetrics());
+            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48 * (fileAdapter.getCount()) + 32, getResources().getDisplayMetrics());
             fileList.setLayoutParams(params);
         }
 
