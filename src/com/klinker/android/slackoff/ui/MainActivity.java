@@ -10,12 +10,13 @@ import com.klinker.android.slackoff.adapter.FileListAdapter;
 import com.klinker.android.slackoff.data.NoteFile;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends Activity {
 
     private ListView folderList;
     private FileListAdapter folderAdapter;
-    private ListView fileList;
+    private AbsListView fileList;
     private FileListAdapter fileAdapter;
 
     private boolean portrait;
@@ -29,29 +30,31 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         folderList = (ListView) findViewById(R.id.folderList);
-        fileList = (ListView) findViewById(R.id.fileList);
+        fileList = (AbsListView) findViewById(R.id.fileList);
 
         portrait = folderList.getTag().equals("portrait");
 
+        Calendar cal = Calendar.getInstance();
+
         files = new ArrayList<NoteFile>();
-        files.add(new NoteFile(false, "/", "note 1"));
-        files.add(new NoteFile(false,"/", "note 2"));
-        files.add(new NoteFile(false, "/", "note 3"));
-        files.add(new NoteFile(false, "/", "note 4"));
-        files.add(new NoteFile(false, "/", "note 5"));
-        files.add(new NoteFile(false, "/", "note 6"));
-        files.add(new NoteFile(false, "/", "note 7"));
-        files.add(new NoteFile(false, "/", "note 8"));
+        files.add(new NoteFile(false, "/", "note 1", cal.getTimeInMillis()));
+        files.add(new NoteFile(false,"/", "note 2", cal.getTimeInMillis()));
+        files.add(new NoteFile(false, "/", "note 3", cal.getTimeInMillis()));
+        files.add(new NoteFile(false, "/", "note 4", cal.getTimeInMillis()));
+        files.add(new NoteFile(false, "/", "note 5", cal.getTimeInMillis()));
+        files.add(new NoteFile(false, "/", "note 6", cal.getTimeInMillis()));
+        files.add(new NoteFile(false, "/", "note 7", cal.getTimeInMillis()));
+        files.add(new NoteFile(false, "/", "note 8", cal.getTimeInMillis()));
 
         folders = new ArrayList<NoteFile>();
-        folders.add(new NoteFile(true, "/", "folder 1"));
-        folders.add(new NoteFile(true, "/", "folder 2"));
-        folders.add(new NoteFile(true, "/", "folder 3"));
-        folders.add(new NoteFile(true, "/", "folder 4"));
-        folders.add(new NoteFile(true, "/", "folder 5"));
-        folders.add(new NoteFile(true, "/", "folder 6"));
-        folders.add(new NoteFile(true, "/", "folder 7"));
-        folders.add(new NoteFile(true, "/", "folder 8"));
+        folders.add(new NoteFile(true, "/", "folder 1", cal.getTimeInMillis()));
+        folders.add(new NoteFile(true, "/", "folder 2", cal.getTimeInMillis()));
+        folders.add(new NoteFile(true, "/", "folder 3", cal.getTimeInMillis()));
+        folders.add(new NoteFile(true, "/", "folder 4", cal.getTimeInMillis()));
+        folders.add(new NoteFile(true, "/", "folder 5", cal.getTimeInMillis()));
+        folders.add(new NoteFile(true, "/", "folder 6", cal.getTimeInMillis()));
+        folders.add(new NoteFile(true, "/", "folder 7", cal.getTimeInMillis()));
+        folders.add(new NoteFile(true, "/", "folder 8", cal.getTimeInMillis()));
 
         folderAdapter = new FileListAdapter(MainActivity.this, folders, true);
         fileAdapter = new FileListAdapter(MainActivity.this, files, false);
@@ -71,9 +74,16 @@ public class MainActivity extends Activity {
         ((TextView) folderHeader.findViewById(R.id.headerText)).setText(getString(R.string.folder));
         folderList.addHeaderView(folderHeader);
 
-        View fileHeader = getLayoutInflater().inflate(R.layout.list_header, null, false);
-        ((TextView) fileHeader.findViewById(R.id.headerText)).setText(getString(R.string.file));
-        fileList.addHeaderView(fileHeader);
+        if (fileList instanceof ListView) {
+            View fileHeader = getLayoutInflater().inflate(R.layout.list_header, null, false);
+            ((TextView) fileHeader.findViewById(R.id.headerText)).setText(getString(R.string.file));
+            ((ListView) fileList).addHeaderView(fileHeader);
+        } else {
+            ((TextView) findViewById(R.id.fileHeader).findViewById(R.id.headerText)).setText(getString(R.string.file));
+            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+            int padding2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 7, getResources().getDisplayMetrics());
+            folderHeader.setPadding(padding2, 0, padding2, padding);
+        }
 
         folderList.setAdapter(folderAdapter);
         fileList.setAdapter(fileAdapter);

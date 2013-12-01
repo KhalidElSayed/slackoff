@@ -48,7 +48,7 @@ public class FileListAdapter extends ArrayAdapter<NoteFile> {
 
         ViewHolder holder = (ViewHolder) rowView.getTag();
         holder.fileName.setText(files.get(position).getName());
-        holder.lastModified.setText(files.get(position).getPath());
+        holder.lastModified.setText(files.get(position).getDate());
 
         return rowView;
     }

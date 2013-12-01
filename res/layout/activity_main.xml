@@ -5,7 +5,6 @@
             android:layout_height="match_parent">
 
     <RelativeLayout
-            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
@@ -24,8 +23,6 @@
                 android:padding="5dp"
                 android:id="@+id/fileList"
                 android:divider="@null"/>
-
-
     </RelativeLayout>
 
 </ScrollView>
