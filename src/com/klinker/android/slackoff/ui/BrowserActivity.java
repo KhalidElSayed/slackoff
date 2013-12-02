@@ -1,6 +1,8 @@
 package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -192,6 +194,76 @@ public class BrowserActivity extends Activity {
                 }
             }
         });
+
+        // handles long clicks on files
+        fileList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                return longClickAction(files.get(portrait ? position - 1 : position));
+            }
+        });
+
+        // handles long clicks on folders
+        folderList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                return longClickAction(folders.get(i - 1));
+            }
+        });
+
+        // starts the service controlling the ever persistent note on the side of your screen
+        startService(new Intent(this, OverNoteService.class));
+    }
+
+    /**
+     * Handles all long clicks on a file or folder
+     * @param noteFile is the file which we are acting on
+     * @return true once dialog has been shown
+     */
+    private boolean longClickAction(final NoteFile noteFile) {
+        new AlertDialog.Builder(BrowserActivity.this)
+                .setTitle(R.string.file_options)
+                .setItems(R.array.long_click_actions, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        switch (i) {
+                            case 0:
+                                final EditText textEntry = new EditText(BrowserActivity.this);
+                                textEntry.setText(noteFile.getName());
+                                textEntry.setSelection(0, textEntry.getText().toString().length());
+
+                                new AlertDialog.Builder(BrowserActivity.this)
+                                        .setView(textEntry)
+                                        .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                File file = noteFile.getFile();
+                                                file.renameTo(new File(file.getParent(), textEntry.getText().toString()));
+                                                recreate();
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.cancel, null)
+                                        .show();
+                                break;
+                            case 1:
+                                new AlertDialog.Builder(BrowserActivity.this)
+                                        .setMessage(R.string.are_you_sure)
+                                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                noteFile.getFile().delete();
+                                                recreate();
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.no, null)
+                                        .show();
+                                break;
+                        }
+                    }
+                })
+                .show();
+
+        return true;
     }
 
     /**
