@@ -8,6 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.klinker.android.slackoff.data.SchoolClass;
 
+/**
+ * Helper class for the database holding class information
+ *
+ * @author Jake and Luke Klinker
+ */
 public class SchoolData {
 
     // Database fields

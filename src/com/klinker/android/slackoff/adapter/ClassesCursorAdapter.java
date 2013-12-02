@@ -16,7 +16,9 @@ import com.klinker.android.slackoff.sql.SchoolHelper;
 import java.util.Date;
 
 /**
- * Created by luke on 12/1/13.
+ * Adapter for handling the class schedule in the drawer
+ *
+ * @author Jake and Luke Klinker
  */
 public class ClassesCursorAdapter extends CursorAdapter {
 

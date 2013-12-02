@@ -1,7 +1,9 @@
 package com.klinker.android.slackoff.data;
 
 /**
- * Created by luke on 12/1/13.
+ * Simple data file for handling class information from sql
+ *
+ * @author Jake and Luke Klinker
  */
 public class SchoolClass {
 
