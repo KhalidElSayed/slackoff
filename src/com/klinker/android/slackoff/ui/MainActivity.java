@@ -1,6 +1,7 @@
 package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
@@ -77,5 +78,7 @@ public class MainActivity extends Activity {
 
         folderList.setAdapter(folderAdapter);
         fileList.setAdapter(fileAdapter);
+
+        startService(new Intent(this, OverNoteService.class));
     }
 }

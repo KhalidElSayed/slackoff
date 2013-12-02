@@ -5,4 +5,10 @@
     <string name="folder">Folders</string>
     <string name="file">Files</string>
 
+    <!-- OverNote Strings -->
+    <string name="note_name_hint">Note Name...</string>
+    <string name="note_text_hint">Note Text...</string>
+    <string name="discard">Discard</string>
+    <string name="save">Save</string>
+
 </resources>
