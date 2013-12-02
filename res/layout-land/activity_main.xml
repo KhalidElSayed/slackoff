@@ -1,53 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- the landscape mode main activity layout -->
-<LinearLayout
+
+<android.support.v4.widget.DrawerLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-    <ListView
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:id="@+id/folderList"
-            android:tag="landscape"
-            android:divider="@null"/>
-
-    <!--<View-->
-            <!--android:layout_width="2dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:layout_marginBottom="5dp"-->
-            <!--android:background="@color/app_color"/>-->
-
+    <!-- the landscape mode main activity layout -->
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_weight="3"
-        android:layout_height="match_parent"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <include layout="@layout/list_header"
-                 android:id="@+id/fileHeader"/>
-
-        <GridView
-                android:layout_width="match_parent"
+        <ListView
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
-                android:paddingRight="5dp"
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp"
-                android:id="@+id/fileList"
-                android:divider="@null"
-                android:horizontalSpacing="5dp"
-                android:verticalSpacing="5dp"
-                android:numColumns="2"/>
+                android:padding="5dp"
+                android:id="@+id/folderList"
+                android:tag="landscape"
+                android:divider="@null"/>
+
+        <!--<View-->
+                <!--android:layout_width="2dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:background="@color/app_color"/>-->
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <include layout="@layout/list_header"
+                     android:id="@+id/fileHeader"/>
+
+            <GridView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:id="@+id/fileList"
+                    android:divider="@null"
+                    android:horizontalSpacing="5dp"
+                    android:verticalSpacing="5dp"
+                    android:numColumns="2"/>
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <!-- The navigation drawer -->
+    <include layout="@layout/main_drawer"
+             android:id="@+id/left_drawer"
+             android:layout_width="280dp"
+             android:layout_height="match_parent"
+             android:layout_gravity="start" >
+
+    </include>
+
+</android.support.v4.widget.DrawerLayout>
 
