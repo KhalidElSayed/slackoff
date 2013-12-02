@@ -16,6 +16,7 @@
     <string name="no">No</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
+    <string name="add_new">Add New</string>
 
     <!-- OverNote Strings -->
     <string name="note_name_hint">Note Name...</string>

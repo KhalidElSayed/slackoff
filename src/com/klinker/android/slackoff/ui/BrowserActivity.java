@@ -14,9 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import com.klinker.android.slackoff.R;
+import com.klinker.android.slackoff.adapter.ClassesCursorAdapter;
 import com.klinker.android.slackoff.adapter.FileListAdapter;
 import com.klinker.android.slackoff.data.NoteFile;
 import com.klinker.android.slackoff.service.OverNoteService;
+import com.klinker.android.slackoff.sql.SchoolData;
 import com.klinker.android.slackoff.utils.Utils;
 
 import java.io.File;
@@ -249,6 +251,15 @@ public class BrowserActivity extends Activity {
                 return longClickAction(folders.get(i - 1));
             }
         });
+
+        SchoolData data = new SchoolData(this);
+        data.open();
+
+        ListView drawerList = (ListView) findViewById(R.id.left_drawer);
+        drawerList.setAdapter(new ClassesCursorAdapter(this, data.getCursor()));
+
+        View footer = View.inflate(this, R.layout.add_class, null);
+        drawerList.addFooterView(footer);
 
         // starts  the service
         // TODO: check if they have a class going on before starting it
