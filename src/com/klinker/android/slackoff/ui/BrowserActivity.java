@@ -94,34 +94,10 @@ public class BrowserActivity extends Activity {
         // set the current view
         setContentView(R.layout.activity_main);
 
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.drawable.ic_drawer, R.string.app_name, R.string.app_name) {
-
-            // drawer is fully closed
-            public void onDrawerClosed(View view) {
-                String name = parent.getName();
-                if (!name.equals("0"))
-                    getActionBar().setTitle(parent.getName());
-            }
-
-            // drawer is fully open
-            public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(getResources().getString(R.string.app_name));
-            }
-        };
-
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        // shows the drawer icon on the action bar
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
-
         // initialize the files I need from the main view
         folderList = (ListView) findViewById(R.id.folderList);
         fileList = (AbsListView) findViewById(R.id.fileList);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         // check whether we are using a portrait or landscape orientation for later on
         portrait = folderList.getTag().equals("portrait");
@@ -136,12 +112,39 @@ public class BrowserActivity extends Activity {
             parent = new File(getIntent().getStringExtra("parent_file"));
             setTitle(parent.getName());
             getActionBar().setDisplayHomeAsUpEnabled(true);
+
+            // lock the drawer so that it can't be opened when not on top level
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         } else {
             parent = new File(Environment.getExternalStorageDirectory().getPath(), "SlackOff");
 
             if (!parent.exists()) {
                 parent.mkdir();
             }
+
+            // initialize the drawer layout since we are on the top level
+            mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                    R.drawable.ic_drawer, R.string.app_name, R.string.app_name) {
+
+                // drawer is fully closed
+                public void onDrawerClosed(View view) {
+                    String name = parent.getName();
+                    if (!name.equals("0"))
+                        getActionBar().setTitle(parent.getName());
+                }
+
+                // drawer is fully open
+                public void onDrawerOpened(View drawerView) {
+                    getActionBar().setTitle(getResources().getString(R.string.app_name));
+                }
+            };
+
+            // Set the drawer toggle as the DrawerListener
+            mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+            // shows the drawer icon on the action bar
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setHomeButtonEnabled(true);
         }
 
         // get a list of all files in the parent directory and sort them in alphabetical order
@@ -281,7 +284,9 @@ public class BrowserActivity extends Activity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after the config changes
-        mDrawerToggle.syncState();
+        if (mDrawerToggle != null) {
+            mDrawerToggle.syncState();
+        }
     }
 
     /**
@@ -291,7 +296,9 @@ public class BrowserActivity extends Activity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        if (mDrawerToggle != null) {
+            mDrawerToggle.onConfigurationChanged(newConfig);
+        }
     }
 
     /**
@@ -375,7 +382,7 @@ public class BrowserActivity extends Activity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item)) {
             // stop now if it was the drawer toggle that was hit
             return true;
         }
