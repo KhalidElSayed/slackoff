@@ -215,7 +215,7 @@ public class BrowserActivity extends Activity {
     /**
      * Handles all long clicks on a file or folder
      * @param noteFile is the file which we are acting on
-     * @return
+     * @return true once dialog has been shown
      */
     private boolean longClickAction(final NoteFile noteFile) {
         new AlertDialog.Builder(BrowserActivity.this)
