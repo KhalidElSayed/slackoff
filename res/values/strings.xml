@@ -8,5 +8,13 @@
     <string name="file">Files</string>
     <string name="none">None</string>
     <string name="no_activities">No apps found to open this file</string>
+    <string name="file_options">File Options:</string>
+    <string name="rename_file">Rename</string>
+    <string name="delete_file">Delete</string>
+    <string name="are_you_sure">Do you really want to delete this file?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
