@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import com.klinker.android.slackoff.R;
@@ -48,6 +52,16 @@ public class BrowserActivity extends Activity {
     private FileListAdapter fileAdapter;
 
     /**
+     * The drawer layout
+     */
+    private DrawerLayout mDrawerLayout;
+
+    /**
+     * Controls the toggle for when the drawer is open
+     */
+    private ActionBarDrawerToggle mDrawerToggle;
+
+    /**
      * whether the device is in portrait mode or not
      */
     private boolean portrait;
@@ -77,6 +91,31 @@ public class BrowserActivity extends Activity {
 
         // set the current view
         setContentView(R.layout.activity_main);
+
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.ic_drawer, R.string.app_name, R.string.app_name) {
+
+            // drawer is fully closed
+            public void onDrawerClosed(View view) {
+                String name = parent.getName();
+                if (!name.equals("0"))
+                    getActionBar().setTitle(parent.getName());
+            }
+
+            // drawer is fully open
+            public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(getResources().getString(R.string.app_name));
+            }
+        };
+
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        // shows the drawer icon on the action bar
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
         // initialize the files I need from the main view
         folderList = (ListView) findViewById(R.id.folderList);
@@ -122,7 +161,7 @@ public class BrowserActivity extends Activity {
             folderList.setLayoutParams(params);
 
             params = (RelativeLayout.LayoutParams) fileList.getLayoutParams();
-            params.height = Utils.toDP(BrowserActivity.this, 49 * (folderAdapter.getCount()) + 25);
+            params.height = Utils.toDP(BrowserActivity.this, 49 * (fileAdapter.getCount()) + 25);
             fileList.setLayoutParams(params);
 
             // hide and show different views depending on how many files are in a directory
@@ -220,6 +259,27 @@ public class BrowserActivity extends Activity {
     }
 
     /**
+     * Sets the drawer state
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after the config changes
+        mDrawerToggle.syncState();
+    }
+
+    /**
+     * Called when the orientation changes
+     * @param newConfig switches orientation
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    /**
      * Handles all long clicks on a file or folder
      * @param noteFile is the file which we are acting on
      * @return true once dialog has been shown
@@ -294,25 +354,18 @@ public class BrowserActivity extends Activity {
     };
 
     /**
-     * Overrides the onresume method so that we can kill the popup note service, that way both aren't shown at the same time
+     * Menu button has been clicked on the action bar
+     * @param item
+     * @return
      */
-    /*@Override
-    public void onResume() {
-        super.onResume();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent killNotes = new Intent("com.klinker.android.notes.STOP_NOTES");
-        sendBroadcast(killNotes);
-    }*/
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            // stop now if it was the drawer toggle that was hit
+            return true;
+        }
 
-    /**
-     * Overrides the onpause method so that we can restart the popup note service when we exit
-     */
-    /*@Override
-    public void onPause() {
-        // starts  the service
-        // TODO: check if they have a class going on before starting it
-        startService(new Intent(this, OverNoteService.class));
-
-        super.onPause();
-    }*/
+        return super.onOptionsItemSelected(item);
+    }
 }
