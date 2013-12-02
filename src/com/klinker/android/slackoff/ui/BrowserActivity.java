@@ -330,7 +330,7 @@ public class BrowserActivity extends Activity {
                                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                noteFile.getFile().delete();
+                                                Utils.deleteDirectory(noteFile.getFile());
                                                 recreate();
                                             }
                                         })
