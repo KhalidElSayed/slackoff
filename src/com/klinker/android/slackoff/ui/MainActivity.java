@@ -2,6 +2,7 @@ package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.TypedValue;
@@ -10,6 +11,7 @@ import android.widget.*;
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.adapter.FileListAdapter;
 import com.klinker.android.slackoff.data.NoteFile;
+import com.klinker.android.slackoff.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -110,6 +112,27 @@ public class MainActivity extends Activity {
                     Intent nextFolder = new Intent(MainActivity.this, MainActivity.class);
                     nextFolder.putExtra("parent_file", folders.get(i - 1).getPath());
                     startActivity(nextFolder);
+                }
+            }
+        });
+
+        fileList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (portrait) {
+                    i--;
+                }
+
+                if (i >= 0) {
+                    Intent fileIntent = new Intent(Intent.ACTION_VIEW);
+                    fileIntent.setDataAndType(Uri.fromFile(files.get(i).getFile()), Utils.getMimeType(files.get(i).getPath()));
+                    fileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    try {
+                        startActivity(fileIntent);
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, getString(R.string.no_activities), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });

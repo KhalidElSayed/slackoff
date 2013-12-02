@@ -6,23 +6,24 @@ import java.util.Date;
 
 public class NoteFile {
 
+    private File file;
+
     private boolean isFolder;
     private String path;
     private String fileName;
     private long date;
 
     public NoteFile(File file) {
+        this.file = file;
+
         this.isFolder = file.isDirectory();
-        this.path = file.getPath();
+        this.path = file.getAbsolutePath();
         this.fileName = file.getName();
         this.date = file.lastModified();
     }
 
-    public NoteFile(boolean isFolder, String path, String name, long date) {
-        this.isFolder = isFolder;
-        this.path = path;
-        this.fileName = name;
-        this.date = date;
+    public File getFile() {
+        return this.file;
     }
 
     public boolean isFolder() {

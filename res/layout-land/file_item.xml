@@ -28,11 +28,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/title_text_color"
+                android:singleLine="true"
                 android:id="@+id/fileName"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/subtitle_text_color"
+                android:singleLine="true"
                 android:id="@+id/date"/>
 
     </LinearLayout>
