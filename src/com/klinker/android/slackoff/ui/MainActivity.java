@@ -1,6 +1,7 @@
 package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.TypedValue;
@@ -40,7 +41,13 @@ public class MainActivity extends Activity {
 
         files = new ArrayList<NoteFile>();
         folders = new ArrayList<NoteFile>();
-        parent = Environment.getExternalStorageDirectory();
+
+        if (getIntent().getStringExtra("parent_file") != null) {
+            parent = new File(getIntent().getStringExtra("parent_file"));
+            setTitle(parent.getName());
+        } else {
+            parent = Environment.getExternalStorageDirectory();
+        }
 
         for (File file : parent.listFiles()) {
             if (file.isDirectory()) {
@@ -63,7 +70,6 @@ public class MainActivity extends Activity {
             fileList.setLayoutParams(params);
         }
 
-
         View folderHeader = getLayoutInflater().inflate(R.layout.list_header, null, false);
         ((TextView) folderHeader.findViewById(R.id.headerText)).setText(getString(R.string.folder));
         folderList.addHeaderView(folderHeader);
@@ -81,5 +87,14 @@ public class MainActivity extends Activity {
 
         folderList.setAdapter(folderAdapter);
         fileList.setAdapter(fileAdapter);
+
+        folderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent nextFolder = new Intent(MainActivity.this, MainActivity.class);
+                nextFolder.putExtra("parent_file", folders.get(i - 1).getPath());
+                startActivity(nextFolder);
+            }
+        });
     }
 }
