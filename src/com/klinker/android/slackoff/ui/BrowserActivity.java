@@ -379,7 +379,7 @@ public class BrowserActivity extends Activity {
             // stop now if it was the drawer toggle that was hit
             return true;
         }
-        
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();

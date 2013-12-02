@@ -27,6 +27,7 @@
     <string name="notes_file">(Note File)</string>
     <string name="error_creating_file">Error creating file</string>
     <string name="file_exists">File already exists!</string>
+    <string name="add_new">Add New</string>
 
     <!-- OverNote Strings -->
     <string name="note_name_hint">Note Name…</string>
