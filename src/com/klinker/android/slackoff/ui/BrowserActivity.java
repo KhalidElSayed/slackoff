@@ -262,14 +262,15 @@ public class BrowserActivity extends Activity {
             }
         });
 
+        // open our sqlite database
         SchoolData data = new SchoolData(this);
         data.open();
 
+        // create the necessary adapter for the drawer and set a footer
         ListView drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ClassesCursorAdapter(this, data.getCursor()));
-
-        View footer = View.inflate(this, R.layout.add_class, null);
+        View footer = getLayoutInflater().inflate(R.layout.add_class, null, false);
         drawerList.addFooterView(footer);
+        drawerList.setAdapter(new ClassesCursorAdapter(this, data.getCursor()));
 
         // starts  the service
         // TODO: check if they have a class going on before starting it
