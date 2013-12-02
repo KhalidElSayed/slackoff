@@ -281,4 +281,13 @@ public class OverNoteService extends Service {
     public int toDP(double px) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) px, displayMatrix);
     }
+
+    @Override
+    public void onDestroy() {
+        // unregisters the receiver so we don't have it firing at weird times
+        // and it isn't leaky and slowing stuff down
+        unregisterReceiver(stopNotes);
+
+        super.onDestroy();
+    }
 }
