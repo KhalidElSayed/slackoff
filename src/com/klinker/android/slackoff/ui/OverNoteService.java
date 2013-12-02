@@ -197,15 +197,18 @@ public class OverNoteService extends Service {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                // sets the focused params so that 
+                // sets the focused params so that we can actually bring up the IME
                 noteWindow.updateViewLayout(noteView, noteParamsFocused);
- name.requestFocus();
+
+                // Brings up the IME and shows the cursor on the EditText
+                name.requestFocus();
                 name.setCursorVisible(true);
 
                 return false;
             }
         });
 
+        // Adds the view to the window for the user
         noteWindow.addView(noteView, noteParamsUnfocused);
     }
 
