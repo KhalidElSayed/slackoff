@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- string resources -->
 <resources>
 
     <string name="app_name">SlackOff</string>
     <string name="folder">Folders</string>
     <string name="file">Files</string>
+    <string name="none">None</string>
+    <string name="no_activities">No apps found to open this file</string>
 
     <!-- OverNote Strings -->
     <string name="note_name_hint">Note Name...</string>

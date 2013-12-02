@@ -78,7 +78,7 @@ public class OverNoteService extends Service {
 
         Notification notification = new Notification(R.drawable.ic_launcher, getResources().getString(R.string.app_name),
                 System.currentTimeMillis());
-        Intent notificationIntent = new Intent(this, MainActivity.class);
+        Intent notificationIntent = new Intent(this, BrowserActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
         notification.setLatestEventInfo(this, getResources().getString(R.string.app_name),
                 "Click to open", pendingIntent);
