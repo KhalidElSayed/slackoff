@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- array resources -->
+<resources>
+
+    <string-array name="long_click_actions">
+        <item>@string/rename_file</item>
+        <item>@string/delete_file</item>
+    </string-array>
+
+</resources>
