@@ -122,7 +122,7 @@ public class BrowserActivity extends Activity {
             folderList.setLayoutParams(params);
 
             params = (RelativeLayout.LayoutParams) fileList.getLayoutParams();
-            params.height = Utils.toDP(BrowserActivity.this, 49 * (folderAdapter.getCount()) + 25);
+            params.height = Utils.toDP(BrowserActivity.this, 49 * (fileAdapter.getCount()) + 25);
             fileList.setLayoutParams(params);
 
             // hide and show different views depending on how many files are in a directory
