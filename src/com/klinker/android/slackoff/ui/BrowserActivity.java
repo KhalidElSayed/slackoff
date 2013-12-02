@@ -16,36 +16,79 @@ import com.klinker.android.slackoff.utils.Utils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Comparator;
 
-public class MainActivity extends Activity {
+/**
+ * Main activity for app, which is a simple file browser
+ *
+ * @author Jake and Luke Klinker
+ */
+public class BrowserActivity extends Activity {
 
+    /**
+     * The listview to hold all folders in the parent file
+     */
     private ListView folderList;
+
+    /**
+     * The adapter for the folder list view
+     */
     private FileListAdapter folderAdapter;
+
+    /**
+     * The listview (or gridview depending on orientation) for the files in the parent file
+     */
     private AbsListView fileList;
+
+    /**
+     * The adapter for the file list view
+     */
     private FileListAdapter fileAdapter;
 
+    /**
+     * whether the device is in portrait mode or not
+     */
     private boolean portrait;
 
+    /**
+     * All the files in the current directory
+     */
     private ArrayList<NoteFile> files;
+
+    /**
+     * all of the folders in the current directory
+     */
     private ArrayList<NoteFile> folders;
 
+    /**
+     * The parent file where all files and folders will be taken from
+     */
     private File parent;
 
+    /**
+     * First step in an activity lifecycle which creates the views
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // set the current view
         setContentView(R.layout.activity_main);
 
+        // initialize the files I need from the main view
         folderList = (ListView) findViewById(R.id.folderList);
         fileList = (AbsListView) findViewById(R.id.fileList);
 
+        // check whether we are using a portrait or landscape orientation for later on
         portrait = folderList.getTag().equals("portrait");
 
+        // initialize the array lists
         files = new ArrayList<NoteFile>();
         folders = new ArrayList<NoteFile>();
 
+        // check if a parent file is sent into the activity through the intent, and if so, set that as the parent
+        // if not, set the main external directory as the parent
         if (getIntent().getStringExtra("parent_file") != null) {
             parent = new File(getIntent().getStringExtra("parent_file"));
             setTitle(parent.getName());
@@ -53,9 +96,11 @@ public class MainActivity extends Activity {
             parent = Environment.getExternalStorageDirectory();
         }
 
+        // get a list of all files in the parent directory and sort them in alphabetical order
         File[] dirFiles = parent.listFiles();
         Arrays.sort(dirFiles, fileComparator);
 
+        // add sorted files to the correct array list to be used in adapters
         for (File file : dirFiles) {
             if (file.isDirectory()) {
                 folders.add(new NoteFile(file));
@@ -64,9 +109,11 @@ public class MainActivity extends Activity {
             }
         }
 
-        folderAdapter = new FileListAdapter(MainActivity.this, folders, true);
-        fileAdapter = new FileListAdapter(MainActivity.this, files, false);
+        // initialize adapters with the files from the directory
+        folderAdapter = new FileListAdapter(BrowserActivity.this, folders, true);
+        fileAdapter = new FileListAdapter(BrowserActivity.this, files, false);
 
+        // set up layout stuff based on orientation
         if (portrait) {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) folderList.getLayoutParams();
             params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 49 * (folderAdapter.getCount()) + 25, getResources().getDisplayMetrics());
@@ -76,6 +123,7 @@ public class MainActivity extends Activity {
             params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 49 * (fileAdapter.getCount()) + 25, getResources().getDisplayMetrics());
             fileList.setLayoutParams(params);
 
+            // hide and show different views depending on how many files are in a directory
             if (folders.size() == 0) {
                 findViewById(R.id.divider).setVisibility(View.GONE);
                 findViewById(R.id.none).setVisibility(View.VISIBLE);
@@ -87,10 +135,13 @@ public class MainActivity extends Activity {
             }
         }
 
+        // show the header for the folders
         View folderHeader = getLayoutInflater().inflate(R.layout.list_header, null, false);
         ((TextView) folderHeader.findViewById(R.id.headerText)).setText(getString(R.string.folder));
         folderList.addHeaderView(folderHeader);
 
+        // show the header for the files (depends on whether we are using a listview which supports headers, or a gridview
+        // which does not
         if (fileList instanceof ListView) {
             View fileHeader = getLayoutInflater().inflate(R.layout.list_header, null, false);
             ((TextView) fileHeader.findViewById(R.id.headerText)).setText(getString(R.string.file));
@@ -102,23 +153,28 @@ public class MainActivity extends Activity {
             folderHeader.setPadding(padding2, 0, padding2, padding);
         }
 
+        // set the adapters for the lists
         folderList.setAdapter(folderAdapter);
         fileList.setAdapter(fileAdapter);
 
+        // advance to the next folder if you click on one (be sure to set the parent_file in the intent
         folderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {
-                    Intent nextFolder = new Intent(MainActivity.this, MainActivity.class);
+                    Intent nextFolder = new Intent(BrowserActivity.this, BrowserActivity.class);
                     nextFolder.putExtra("parent_file", folders.get(i - 1).getPath());
                     startActivity(nextFolder);
                 }
             }
         });
 
+        // parse the mimetype of the file and find the correct app on your device to open that file (or none if no
+        // correct app exists)
         fileList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // account for the header view
                 if (portrait) {
                     i--;
                 }
@@ -131,13 +187,16 @@ public class MainActivity extends Activity {
                     try {
                         startActivity(fileIntent);
                     } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, getString(R.string.no_activities), Toast.LENGTH_LONG).show();
+                        Toast.makeText(BrowserActivity.this, getString(R.string.no_activities), Toast.LENGTH_LONG).show();
                     }
                 }
             }
         });
     }
 
+    /**
+     * the comparator used to determine alphabetical order of files when they are being sorted
+     */
     Comparator<File> fileComparator = new Comparator<File>() {
         @Override
         public int compare(File file1, File file2) {

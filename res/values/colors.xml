@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- colors -->
 <resources>
 
     <color name="app_color">#f80</color>
