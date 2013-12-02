@@ -2,6 +2,7 @@ package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.*;
@@ -9,6 +10,7 @@ import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.adapter.FileListAdapter;
 import com.klinker.android.slackoff.data.NoteFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -24,6 +26,8 @@ public class MainActivity extends Activity {
     private ArrayList<NoteFile> files;
     private ArrayList<NoteFile> folders;
 
+    private File parent;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,38 +38,28 @@ public class MainActivity extends Activity {
 
         portrait = folderList.getTag().equals("portrait");
 
-        Calendar cal = Calendar.getInstance();
-
         files = new ArrayList<NoteFile>();
-        files.add(new NoteFile(false, "/", "note 1", cal.getTimeInMillis()));
-        files.add(new NoteFile(false,"/", "note 2", cal.getTimeInMillis()));
-        files.add(new NoteFile(false, "/", "note 3", cal.getTimeInMillis()));
-        files.add(new NoteFile(false, "/", "note 4", cal.getTimeInMillis()));
-        files.add(new NoteFile(false, "/", "note 5", cal.getTimeInMillis()));
-        files.add(new NoteFile(false, "/", "note 6", cal.getTimeInMillis()));
-        files.add(new NoteFile(false, "/", "note 7", cal.getTimeInMillis()));
-        files.add(new NoteFile(false, "/", "note 8", cal.getTimeInMillis()));
-
         folders = new ArrayList<NoteFile>();
-        folders.add(new NoteFile(true, "/", "folder 1", cal.getTimeInMillis()));
-        folders.add(new NoteFile(true, "/", "folder 2", cal.getTimeInMillis()));
-        folders.add(new NoteFile(true, "/", "folder 3", cal.getTimeInMillis()));
-        folders.add(new NoteFile(true, "/", "folder 4", cal.getTimeInMillis()));
-        folders.add(new NoteFile(true, "/", "folder 5", cal.getTimeInMillis()));
-        folders.add(new NoteFile(true, "/", "folder 6", cal.getTimeInMillis()));
-        folders.add(new NoteFile(true, "/", "folder 7", cal.getTimeInMillis()));
-        folders.add(new NoteFile(true, "/", "folder 8", cal.getTimeInMillis()));
+        parent = Environment.getExternalStorageDirectory();
+
+        for (File file : parent.listFiles()) {
+            if (file.isDirectory()) {
+                folders.add(new NoteFile(file));
+            } else {
+                files.add(new NoteFile(file));
+            }
+        }
 
         folderAdapter = new FileListAdapter(MainActivity.this, folders, true);
         fileAdapter = new FileListAdapter(MainActivity.this, files, false);
 
         if (portrait) {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) folderList.getLayoutParams();
-            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48 * (folderAdapter.getCount()) + 32, getResources().getDisplayMetrics());
+            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 49 * (folderAdapter.getCount()) + 25, getResources().getDisplayMetrics());
             folderList.setLayoutParams(params);
 
             params = (RelativeLayout.LayoutParams) fileList.getLayoutParams();
-            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48 * (fileAdapter.getCount()) + 32, getResources().getDisplayMetrics());
+            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 49 * (fileAdapter.getCount()) + 25, getResources().getDisplayMetrics());
             fileList.setLayoutParams(params);
         }
 
