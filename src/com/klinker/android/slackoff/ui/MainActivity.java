@@ -13,7 +13,9 @@ import com.klinker.android.slackoff.data.NoteFile;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 
 public class MainActivity extends Activity {
 
@@ -49,7 +51,10 @@ public class MainActivity extends Activity {
             parent = Environment.getExternalStorageDirectory();
         }
 
-        for (File file : parent.listFiles()) {
+        File[] dirFiles = parent.listFiles();
+        Arrays.sort(dirFiles, fileComparator);
+
+        for (File file : dirFiles) {
             if (file.isDirectory()) {
                 folders.add(new NoteFile(file));
             } else {
@@ -68,6 +73,16 @@ public class MainActivity extends Activity {
             params = (RelativeLayout.LayoutParams) fileList.getLayoutParams();
             params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 49 * (fileAdapter.getCount()) + 25, getResources().getDisplayMetrics());
             fileList.setLayoutParams(params);
+
+            if (folders.size() == 0) {
+                findViewById(R.id.divider).setVisibility(View.GONE);
+                findViewById(R.id.none).setVisibility(View.VISIBLE);
+            }
+
+            if (files.size() == 0) {
+                findViewById(R.id.divider2).setVisibility(View.GONE);
+                findViewById(R.id.none2).setVisibility(View.VISIBLE);
+            }
         }
 
         View folderHeader = getLayoutInflater().inflate(R.layout.list_header, null, false);
@@ -85,13 +100,7 @@ public class MainActivity extends Activity {
             folderHeader.setPadding(padding2, 0, padding2, padding);
         }
 
-        if (folders.size() == 0) {
-            findViewById(R.id.divider).setVisibility(View.GONE);
-        }
 
-        if (files.size() == 0) {
-            findViewById(R.id.divider2).setVisibility(View.GONE);
-        }
 
         folderList.setAdapter(folderAdapter);
         fileList.setAdapter(fileAdapter);
@@ -105,4 +114,23 @@ public class MainActivity extends Activity {
             }
         });
     }
+
+    Comparator<? super File> fileComparator = new Comparator<File>() {
+        public int compare(File file1, File file2) {
+            if (file1.isDirectory()) {
+                if (file2.isDirectory()) {
+                    return String.valueOf(file1.getName().toLowerCase()).compareTo(file2.getName().toLowerCase());
+                } else {
+                    return -1;
+                }
+            } else {
+                if (file2.isDirectory()) {
+                    return 1;
+                } else {
+                    return String.valueOf(file1.getName().toLowerCase()).compareTo(file2.getName().toLowerCase());
+                }
+            }
+
+        }
+    };
 }

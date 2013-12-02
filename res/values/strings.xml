@@ -4,5 +4,6 @@
     <string name="app_name">SlackOff</string>
     <string name="folder">Folders</string>
     <string name="file">Files</string>
+    <string name="none">None</string>
 
 </resources>
