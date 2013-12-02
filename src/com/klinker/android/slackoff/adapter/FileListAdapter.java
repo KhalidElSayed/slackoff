@@ -83,7 +83,7 @@ public class FileListAdapter extends ArrayAdapter<NoteFile> {
 
         // finds specified view holder and sets the text correctly
         ViewHolder holder = (ViewHolder) rowView.getTag();
-        holder.fileName.setText(files.get(position).getName());
+        holder.fileName.setText(files.get(position).getName().replace(".klink", " " + context.getString(R.string.notes_file)));
         holder.lastModified.setText(files.get(position).getDate());
 
         return rowView;

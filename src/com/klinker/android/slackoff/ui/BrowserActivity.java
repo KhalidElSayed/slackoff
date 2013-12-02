@@ -2,11 +2,13 @@ package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import com.klinker.android.slackoff.R;
@@ -16,9 +18,8 @@ import com.klinker.android.slackoff.service.OverNoteService;
 import com.klinker.android.slackoff.utils.Utils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Main activity for app, which is a simple file browser
@@ -94,8 +95,13 @@ public class BrowserActivity extends Activity {
         if (getIntent().getStringExtra("parent_file") != null) {
             parent = new File(getIntent().getStringExtra("parent_file"));
             setTitle(parent.getName());
+            getActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
-            parent = Environment.getExternalStorageDirectory();
+            parent = new File(Environment.getExternalStorageDirectory().getPath(), "SlackOff");
+
+            if (!parent.exists()) {
+                parent.mkdir();
+            }
         }
 
         // get a list of all files in the parent directory and sort them in alphabetical order
@@ -107,7 +113,9 @@ public class BrowserActivity extends Activity {
             if (file.isDirectory()) {
                 folders.add(new NoteFile(file));
             } else {
-                files.add(new NoteFile(file));
+                if (file.getName().endsWith(".klink")) {
+                    files.add(new NoteFile(file));
+                }
             }
         }
 
@@ -289,6 +297,79 @@ public class BrowserActivity extends Activity {
 
         }
     };
+
+    /**
+     * Acts when the option item has been selected
+     * @param item the selected item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.menu_add:
+                // get the view to display
+                final View v = getLayoutInflater().inflate(R.layout.create_dialog, null, false);
+                new AlertDialog.Builder(BrowserActivity.this)
+                        .setTitle(R.string.create_new)
+                        .setView(v)
+                        .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // ensure that the file name is filled in
+                                if (((EditText) v.findViewById(R.id.fileName)).getText().toString().equals("")) {
+                                    Toast.makeText(BrowserActivity.this, getString(R.string.error_creating_file), Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                if (((RadioButton) v.findViewById(R.id.folderButton)).isChecked()) {
+                                    // we are creating a folder...
+                                    File file = new File(parent, ((EditText) v.findViewById(R.id.fileName)).getText().toString());
+
+                                    if (!file.exists()) {
+                                        file.mkdir();
+                                    } else {
+                                        Toast.makeText(BrowserActivity.this, getString(R.string.file_exists), Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    // we are creating a note file...
+                                    try {
+                                        File file = new File(parent, ((EditText) v.findViewById(R.id.fileName)).getText().toString() + ".klink");
+                                        if (!file.exists()) {
+                                            file.createNewFile();
+                                        } else {
+                                            Toast.makeText(BrowserActivity.this, getString(R.string.file_exists), Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        // :( something went wrong creating our note
+
+                                        Toast.makeText(BrowserActivity.this, getString(R.string.error_creating_file), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                recreate();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Attaches the options menu to the activity
+     * @param menu the menu to attach
+     * @return
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.browser_activity, menu);
+        return true;
+    }
 
     /**
      * Overrides the onresume method so that we can kill the popup note service, that way both aren't shown at the same time

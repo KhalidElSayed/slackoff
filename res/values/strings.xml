@@ -3,10 +3,11 @@
 <!-- string resources -->
 <resources>
 
+    <!-- main strings -->
     <string name="app_name">SlackOff</string>
     <string name="folder">Folders</string>
     <string name="file">Files</string>
-    <string name="none">None</string>
+    <string name="none">Empty</string>
     <string name="no_activities">No apps found to open this file</string>
     <string name="file_options">File Options:</string>
     <string name="rename_file">Rename</string>
@@ -16,10 +17,20 @@
     <string name="no">No</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
+    <string name="menu_add">Add</string>
+    <string name="add_folder">Add Folder</string>
+    <string name="add_file">Add File</string>
+    <string name="new_folder">Create New Folder</string>
+    <string name="new_file">Create New File</string>
+    <string name="name_of_file">Name of File</string>
+    <string name="create_new">Create New…</string>
+    <string name="notes_file">(Note File)</string>
+    <string name="error_creating_file">Error creating file</string>
+    <string name="file_exists">File already exists!</string>
 
     <!-- OverNote Strings -->
-    <string name="note_name_hint">Note Name...</string>
-    <string name="note_text_hint">Note Text...</string>
+    <string name="note_name_hint">Note Name…</string>
+    <string name="note_text_hint">Note Text…</string>
     <string name="discard">Discard</string>
     <string name="save">Save</string>
 
