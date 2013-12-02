@@ -105,6 +105,10 @@ public class OverNoteService extends Service {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
 
+                // takes away the focus and changes the params
+                name.clearFocus();
+                content.clearFocus();
+
                 //mGestureDetector.onTouchEvent(event);
 
                 if (touchedNoteHandle(event)) {
@@ -121,6 +125,7 @@ public class OverNoteService extends Service {
 
                             // update my view and where it is at
                             noteParamsUnfocused.x = (int)event.getRawX();
+                            noteParamsFocused.x = (int) event.getRawX();
                             noteWindow.updateViewLayout(noteView, noteParamsUnfocused);
 
                             return true;
@@ -149,9 +154,9 @@ public class OverNoteService extends Service {
         // sets it up on the screen. it will start at the edge and the user will be able to swipe it out
         noteParamsUnfocused = new WindowManager.LayoutParams(
                 (int) (width * .90),          // width of the note box
-                (int) (height* .55),           // height of the note box
+                (int) (height* .40),           // height of the note box
                 width - 40,           // 15 density pixels shown on on the right side of the screen
-                (int) (height * .2),        // starts 12.5% down the screen
+                (int) (height * .08),        // starts 12.5% down the screen
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                         | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
@@ -166,17 +171,14 @@ public class OverNoteService extends Service {
         // so i use this to trick the system when i need that focus to enter text and bring up the keyboard
         noteParamsFocused = new WindowManager.LayoutParams(
                 (int) (width * .90),          // width of the note box
-                (int) (height* .55),           // height of the note box
+                (int) (height* .40),           // height of the note box
                 width - 40,           // 15 density pixels shown on on the right side of the screen
-                (int) (height * .2),        // starts 12.5% down the screen
+                (int) (height * .08),        // starts 12.5% down the screen
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
-        noteParamsUnfocused.gravity = Gravity.TOP | Gravity.LEFT;
-        noteParamsUnfocused.windowAnimations = android.R.style.Animation_InputMethod;
+        noteParamsFocused.gravity = Gravity.TOP | Gravity.LEFT;
+        noteParamsFocused.windowAnimations = android.R.style.Animation_InputMethod;
 
         // gets the system service
         noteWindow = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -203,6 +205,21 @@ public class OverNoteService extends Service {
                 // Brings up the IME and shows the cursor on the EditText
                 name.requestFocus();
                 name.setCursorVisible(true);
+
+                return false;
+            }
+        });
+
+        content.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                // sets the focused params so that we can actually bring up the IME
+                noteWindow.updateViewLayout(noteView, noteParamsFocused);
+
+                // Brings up the IME and shows the cursor on the EditText
+                content.requestFocus();
+                content.setCursorVisible(true);
 
                 return false;
             }
