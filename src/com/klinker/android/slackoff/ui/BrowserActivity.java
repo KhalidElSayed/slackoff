@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -234,6 +235,7 @@ public class BrowserActivity extends Activity {
 
                 if (i >= 0) {
                     Intent fileIntent = new Intent(Intent.ACTION_VIEW);
+                    Log.v("mime_type", Utils.getMimeType(files.get(i).getPath()));
                     fileIntent.setDataAndType(Uri.fromFile(files.get(i).getFile()), Utils.getMimeType(files.get(i).getPath()));
                     fileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

@@ -33,7 +33,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="file" />
                 <data android:mimeType="*/*" />
-                <data android:pathPattern=".*\\.kdb" />
+                <data android:pathPattern=".*\\.klink" />
                 <data android:host="*" />
             </intent-filter>
         </activity>
