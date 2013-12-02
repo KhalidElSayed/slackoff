@@ -213,6 +213,10 @@ public class BrowserActivity extends Activity {
 
         // starts the service controlling the ever persistent note on the side of your screen
         startService(new Intent(this, OverNoteService.class));
+
+        // starts  the service
+        // TODO: check if they have a class going on before starting it
+        startService(new Intent(this, OverNoteService.class));
     }
 
     /**
@@ -292,23 +296,23 @@ public class BrowserActivity extends Activity {
     /**
      * Overrides the onresume method so that we can kill the popup note service, that way both aren't shown at the same time
      */
-    @Override
+    /*@Override
     public void onResume() {
         super.onResume();
 
         Intent killNotes = new Intent("com.klinker.android.notes.STOP_NOTES");
         sendBroadcast(killNotes);
-    }
+    }*/
 
     /**
      * Overrides the onpause method so that we can restart the popup note service when we exit
      */
-    @Override
+    /*@Override
     public void onPause() {
         // starts  the service
         // TODO: check if they have a class going on before starting it
         startService(new Intent(this, OverNoteService.class));
 
         super.onPause();
-    }
+    }*/
 }
