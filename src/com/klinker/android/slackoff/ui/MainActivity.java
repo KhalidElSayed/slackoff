@@ -100,17 +100,17 @@ public class MainActivity extends Activity {
             folderHeader.setPadding(padding2, 0, padding2, padding);
         }
 
-
-
         folderList.setAdapter(folderAdapter);
         fileList.setAdapter(fileAdapter);
 
         folderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent nextFolder = new Intent(MainActivity.this, MainActivity.class);
-                nextFolder.putExtra("parent_file", folders.get(i - 1).getPath());
-                startActivity(nextFolder);
+                if (i != 0) {
+                    Intent nextFolder = new Intent(MainActivity.this, MainActivity.class);
+                    nextFolder.putExtra("parent_file", folders.get(i - 1).getPath());
+                    startActivity(nextFolder);
+                }
             }
         });
     }
