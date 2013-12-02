@@ -17,12 +17,15 @@ public class Utils {
     public static String getMimeType(String url) {
         // escape white spaces
         url = url.replace(" ", "\\ ");
-        String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        if (extension != null) {
-            MimeTypeMap mime = MimeTypeMap.getSingleton();
-            type = mime.getMimeTypeFromExtension(extension);
+        String extention = url.substring(url.lastIndexOf("."));
+        String mimeTypeMap =MimeTypeMap.getFileExtensionFromUrl(extention);
+        String mimeType = MimeTypeMap.getSingleton()
+                .getMimeTypeFromExtension(mimeTypeMap);
+
+        if (mimeType != null) {
+            return mimeType;
+        } else {
+            return "file/" + extention.replace(".", "");
         }
-        return type;
     }
 }
