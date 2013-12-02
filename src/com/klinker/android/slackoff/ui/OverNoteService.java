@@ -73,7 +73,7 @@ public class OverNoteService extends Service {
 
         // registers the intentfilter to kill the service when the class has ended
         IntentFilter filter = new IntentFilter();
-        filter.addAction("com.klinker.android.messaging.STOP_NOTES");
+        filter.addAction("com.klinker.android.notes.STOP_NOTES");
         registerReceiver(stopNotes, filter);
 
         Notification notification = new Notification(R.drawable.ic_launcher, getResources().getString(R.string.app_name),
@@ -274,11 +274,21 @@ public class OverNoteService extends Service {
             // kills the notification, stops the service, then cleans up and clears the receiver
             stopForeground(true);
             stopSelf();
-            unregisterReceiver(this);
+
+            // the receiver will be unregisterd in the onDestroy
         }
     };
 
     public int toDP(double px) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) px, displayMatrix);
+    }
+
+    @Override
+    public void onDestroy() {
+        // unregisters the receiver so we don't have it firing at weird times
+        // and it isn't leaky and slowing stuff down
+        unregisterReceiver(stopNotes);
+
+        super.onDestroy();
     }
 }

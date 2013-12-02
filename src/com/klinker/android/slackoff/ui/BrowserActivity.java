@@ -264,7 +264,6 @@ public class BrowserActivity extends Activity {
                 .show();
 
         return true;
->>>>>>> master
     }
 
     /**
@@ -289,4 +288,21 @@ public class BrowserActivity extends Activity {
 
         }
     };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Intent killNotes = new Intent("com.klinker.android.notes.STOP_NOTES");
+        sendBroadcast(killNotes);
+    }
+
+    @Override
+    public void onPause() {
+        // starts  the service
+        // TODO: check if they have a class going on before starting it
+        startService(new Intent(this, OverNoteService.class));
+
+        super.onPause();
+    }
 }
