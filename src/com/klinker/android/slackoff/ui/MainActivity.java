@@ -115,7 +115,8 @@ public class MainActivity extends Activity {
         });
     }
 
-    Comparator<? super File> fileComparator = new Comparator<File>() {
+    Comparator<File> fileComparator = new Comparator<File>() {
+        @Override
         public int compare(File file1, File file2) {
             if (file1.isDirectory()) {
                 if (file2.isDirectory()) {
