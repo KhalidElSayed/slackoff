@@ -1,5 +1,7 @@
 package com.klinker.android.slackoff.utils;
 
+import android.content.Context;
+import android.util.TypedValue;
 import android.webkit.MimeTypeMap;
 
 /**
@@ -24,5 +26,14 @@ public class Utils {
             type = mime.getMimeTypeFromExtension(extension);
         }
         return type;
+    }
+
+    /**
+     * Converts pixels to density independent pixels
+     * @param px the number of pixels
+     * @return the value of the density independent pixels
+     */
+    public static int toDP(Context context, double px) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) px, context.getResources().getDisplayMetrics());
     }
 }

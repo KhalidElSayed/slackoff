@@ -7,12 +7,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.*;
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.adapter.FileListAdapter;
 import com.klinker.android.slackoff.data.NoteFile;
+import com.klinker.android.slackoff.service.OverNoteService;
 import com.klinker.android.slackoff.utils.Utils;
 
 import java.io.File;
@@ -118,11 +118,11 @@ public class BrowserActivity extends Activity {
         // set up layout stuff based on orientation
         if (portrait) {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) folderList.getLayoutParams();
-            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 49 * (folderAdapter.getCount()) + 25, getResources().getDisplayMetrics());
+            params.height = Utils.toDP(BrowserActivity.this, 49 * (folderAdapter.getCount()) + 25);
             folderList.setLayoutParams(params);
 
             params = (RelativeLayout.LayoutParams) fileList.getLayoutParams();
-            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 49 * (fileAdapter.getCount()) + 25, getResources().getDisplayMetrics());
+            params.height = Utils.toDP(BrowserActivity.this, 49 * (folderAdapter.getCount()) + 25);
             fileList.setLayoutParams(params);
 
             // hide and show different views depending on how many files are in a directory
@@ -150,8 +150,8 @@ public class BrowserActivity extends Activity {
             ((ListView) fileList).addHeaderView(fileHeader);
         } else {
             ((TextView) findViewById(R.id.fileHeader).findViewById(R.id.headerText)).setText(getString(R.string.file));
-            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-            int padding2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 7, getResources().getDisplayMetrics());
+            int padding = Utils.toDP(BrowserActivity.this, 10);
+            int padding2 = Utils.toDP(BrowserActivity.this, 7);
             folderHeader.setPadding(padding2, 0, padding2, padding);
         }
 

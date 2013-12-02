@@ -23,6 +23,6 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ui.OverNoteService" />
+        <service android:name=".service.OverNoteService" />
     </application>
 </manifest>

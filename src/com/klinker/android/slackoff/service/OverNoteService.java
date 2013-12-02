@@ -1,4 +1,4 @@
-package com.klinker.android.slackoff.ui;
+package com.klinker.android.slackoff.service;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -26,7 +26,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.klinker.android.slackoff.R;
+import com.klinker.android.slackoff.ui.BrowserActivity;
 
+/**
+ * Service which controls overnote
+ *
+ * @author Jake and Luke Klinker
+ */
 public class OverNoteService extends Service {
 
     // just a random number for the id
@@ -37,7 +43,6 @@ public class OverNoteService extends Service {
     private SharedPreferences sharedPrefs;
     private Vibrator v;
     private Display d;
-    private DisplayMetrics displayMatrix;
     private int height;
     private int width;
 
@@ -55,6 +60,9 @@ public class OverNoteService extends Service {
     private Button discard;
 
 
+    /**
+     * first lifecycle event of the service which starts and creates everything we need
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -68,8 +76,6 @@ public class OverNoteService extends Service {
         d = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         height = d.getHeight();
         width = d.getWidth();
-
-        displayMatrix = getResources().getDisplayMetrics();
 
         // registers the intentfilter to kill the service when the class has ended
         IntentFilter filter = new IntentFilter();
@@ -99,7 +105,12 @@ public class OverNoteService extends Service {
         setUpTouchListeners(height, width);
     }
 
-    public void setUpTouchListeners(final int height, final int width) {
+    /**
+     * registers all of the necessary touch listeners on the window
+     * @param height the height of the window
+     * @param width the width of the window
+     */
+    private void setUpTouchListeners(final int height, final int width) {
         noteView.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -143,11 +154,19 @@ public class OverNoteService extends Service {
         });
     }
 
-    public boolean touchedNoteHandle(MotionEvent event) {
+    /**
+     * Controls when the handle to pull the note in and out has been touched
+     * @param event the motion event to check agains
+     * @return true if handle has been touched
+     */
+    private boolean touchedNoteHandle(MotionEvent event) {
         return event.getX() > noteView.getX() - 100 && event.getX() < noteView.getX() + 100;  // checks the x position within a range
     }
 
-    public void initialSetup() {
+    /**
+     * Sets up the initial window
+     */
+    private void initialSetup() {
         // creates the note from the resource file
         noteView = View.inflate(this, R.layout.over_note, null);
 
@@ -260,11 +279,19 @@ public class OverNoteService extends Service {
         noteWindow.addView(noteView, noteParamsUnfocused);
     }
 
+    /**
+     * Binds the service
+     * @param intent
+     * @return
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
+    /**
+     * Receiver which will kill the service when we enter the app so that both aren't open at the same time
+     */
     public BroadcastReceiver stopNotes = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -279,10 +306,9 @@ public class OverNoteService extends Service {
         }
     };
 
-    public int toDP(double px) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) px, displayMatrix);
-    }
-
+    /**
+     * Kills the service and unregisters the receivers
+     */
     @Override
     public void onDestroy() {
         // unregisters the receiver so we don't have it firing at weird times
