@@ -95,7 +95,7 @@ public class OverNoteService extends Service {
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         // more setup stuff for the view
-        initialSetup(height, width);
+        initialSetup();
         setUpTouchListeners(height, width);
     }
 
@@ -147,7 +147,7 @@ public class OverNoteService extends Service {
         return event.getX() > noteView.getX() - 100 && event.getX() < noteView.getX() + 100;  // checks the x position within a range
     }
 
-    public void initialSetup(int height, int width) {
+    public void initialSetup() {
         // creates the note from the resource file
         noteView = View.inflate(this, R.layout.over_note, null);
 
@@ -164,7 +164,7 @@ public class OverNoteService extends Service {
                         | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 PixelFormat.TRANSLUCENT);
         noteParamsUnfocused.gravity = Gravity.TOP | Gravity.LEFT;
-        noteParamsUnfocused.windowAnimations = android.R.style.Animation_InputMethod;
+        noteParamsUnfocused.windowAnimations = android.R.style.Animation_Translucent;
 
         // needed as a workaround for focusing on the edit text boxes
         // as an alert dialog, it doesn't let you focus and still be able to watch for outside touches
@@ -178,7 +178,7 @@ public class OverNoteService extends Service {
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
         noteParamsFocused.gravity = Gravity.TOP | Gravity.LEFT;
-        noteParamsFocused.windowAnimations = android.R.style.Animation_InputMethod;
+        noteParamsFocused.windowAnimations = android.R.style.Animation_Translucent;
 
         // gets the system service
         noteWindow = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -225,6 +225,37 @@ public class OverNoteService extends Service {
             }
         });
 
+        discard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // discard clicked, we just want to push the window back to the side
+
+                // set the x value on the window
+                noteParamsFocused.x = width - 40;
+                noteParamsUnfocused.x = width - 40;
+
+                // make sure the focuses are cleared
+                name.clearFocus();
+                content.clearFocus();
+
+                // here we are going to actually remove the view and re-add it
+                // I do it this way because there are only system level animations that can be applied to alert dialogs
+                // and this is the way to run that animation. simply updating the view doesn't do it
+                noteWindow.removeView(noteView);
+                noteWindow.addView(noteView, noteParamsUnfocused);
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // save has been clicked. we want to save the data, then simulate a discard clicked
+
+                // simulated discard to clear and reset window
+                discard.performClick();
+            }
+        });
+
         // Adds the view to the window for the user
         noteWindow.addView(noteView, noteParamsUnfocused);
     }
@@ -237,6 +268,8 @@ public class OverNoteService extends Service {
     public BroadcastReceiver stopNotes = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
+            noteWindow.removeView(noteView);
 
             // kills the notification, stops the service, then cleans up and clears the receiver
             stopForeground(true);

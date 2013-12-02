@@ -192,6 +192,8 @@ public class BrowserActivity extends Activity {
                 }
             }
         });
+
+        startService(new Intent(this, OverNoteService.class));
     }
 
     /**
