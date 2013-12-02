@@ -211,9 +211,6 @@ public class BrowserActivity extends Activity {
             }
         });
 
-        // starts the service controlling the ever persistent note on the side of your screen
-        startService(new Intent(this, OverNoteService.class));
-
         // starts  the service
         // TODO: check if they have a class going on before starting it
         startService(new Intent(this, OverNoteService.class));
