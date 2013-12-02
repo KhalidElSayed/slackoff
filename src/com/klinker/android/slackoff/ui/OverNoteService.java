@@ -44,7 +44,8 @@ public class OverNoteService extends Service {
     // detects the gestures so i know what the user is doing
     private GestureDetector mGestureDetector;
 
-    private WindowManager.LayoutParams noteParams;
+    private WindowManager.LayoutParams noteParamsUnfocused;
+    private WindowManager.LayoutParams noteParamsFocused;
     private WindowManager noteWindow;
     private View noteView;
 
@@ -113,13 +114,14 @@ public class OverNoteService extends Service {
                         case MotionEvent.ACTION_DOWN:
 
                             // Vibrate
-                            v.vibrate(200);
 
                             return true;
 
                         case MotionEvent.ACTION_MOVE:
 
                             // update my view and where it is at
+                            noteParamsUnfocused.x = (int)event.getRawX();
+                            noteWindow.updateViewLayout(noteView, noteParamsUnfocused);
 
                             return true;
 
@@ -137,8 +139,7 @@ public class OverNoteService extends Service {
     }
 
     public boolean touchedNoteHandle(MotionEvent event) {
-        return event.getX() > noteView.getX() && event.getX() < noteView.getX() + toDP(15)
-                && event.getY() > noteView.getY() && event.getY() < noteView.getY() + toDP(height * .75);
+        return event.getX() > noteView.getX() - 100 && event.getX() < noteView.getX() + 100;  // checks the x position within a range
     }
 
     public void initialSetup(int height, int width) {
@@ -146,10 +147,10 @@ public class OverNoteService extends Service {
         noteView = View.inflate(this, R.layout.over_note, null);
 
         // sets it up on the screen. it will start at the edge and the user will be able to swipe it out
-        noteParams = new WindowManager.LayoutParams(
-                (int) (width * .75),          // width of the note box
+        noteParamsUnfocused = new WindowManager.LayoutParams(
+                (int) (width * .90),          // width of the note box
                 (int) (height* .55),           // height of the note box
-                width - 30,           // 15 density pixels shown on on the right side of the screen
+                width - 40,           // 15 density pixels shown on on the right side of the screen
                 (int) (height * .2),        // starts 12.5% down the screen
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
@@ -157,8 +158,25 @@ public class OverNoteService extends Service {
                         | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
                         | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 PixelFormat.TRANSLUCENT);
-        noteParams.gravity = Gravity.TOP | Gravity.LEFT;
-        noteParams.windowAnimations = android.R.style.Animation_InputMethod;
+        noteParamsUnfocused.gravity = Gravity.TOP | Gravity.LEFT;
+        noteParamsUnfocused.windowAnimations = android.R.style.Animation_InputMethod;
+
+        // needed as a workaround for focusing on the edit text boxes
+        // as an alert dialog, it doesn't let you focus and still be able to watch for outside touches
+        // so i use this to trick the system when i need that focus to enter text and bring up the keyboard
+        noteParamsFocused = new WindowManager.LayoutParams(
+                (int) (width * .90),          // width of the note box
+                (int) (height* .55),           // height of the note box
+                width - 40,           // 15 density pixels shown on on the right side of the screen
+                (int) (height * .2),        // starts 12.5% down the screen
+                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                        | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                PixelFormat.TRANSLUCENT);
+        noteParamsUnfocused.gravity = Gravity.TOP | Gravity.LEFT;
+        noteParamsUnfocused.windowAnimations = android.R.style.Animation_InputMethod;
 
         // gets the system service
         noteWindow = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -169,7 +187,26 @@ public class OverNoteService extends Service {
         discard = (Button) noteView.findViewById(R.id.discard);
         save = (Button) noteView.findViewById(R.id.save);
 
-        noteWindow.addView(noteView, noteParams);
+        // needed for the style of the edit texts
+        name.clearFocus();
+        name.setCursorVisible(false);
+        content.clearFocus();
+        content.setCursorVisible(false);
+
+        name.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                // sets the focused params so that 
+                noteWindow.updateViewLayout(noteView, noteParamsFocused);
+ name.requestFocus();
+                name.setCursorVisible(true);
+
+                return false;
+            }
+        });
+
+        noteWindow.addView(noteView, noteParamsUnfocused);
     }
 
     @Override

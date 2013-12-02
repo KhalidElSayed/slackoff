@@ -2,5 +2,6 @@
 <resources>
 
     <color name="app_color">#f80</color>
+    <color name="pressed_app_color">#77FF8800</color>
 
 </resources>
