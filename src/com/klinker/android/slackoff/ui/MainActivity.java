@@ -85,6 +85,14 @@ public class MainActivity extends Activity {
             folderHeader.setPadding(padding2, 0, padding2, padding);
         }
 
+        if (folders.size() == 0) {
+            findViewById(R.id.divider).setVisibility(View.GONE);
+        }
+
+        if (files.size() == 0) {
+            findViewById(R.id.divider2).setVisibility(View.GONE);
+        }
+
         folderList.setAdapter(folderAdapter);
         fileList.setAdapter(fileAdapter);
 

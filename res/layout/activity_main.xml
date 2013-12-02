@@ -45,7 +45,8 @@
                 android:layout_marginRight="7dp"
                 android:layout_marginBottom="5dp"
                 android:background="@color/folder_outline"
-                android:layout_below="@+id/fileList"/>
+                android:layout_below="@+id/fileList"
+                android:id="@+id/divider2"/>
     </RelativeLayout>
 
 </ScrollView>
