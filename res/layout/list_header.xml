@@ -14,12 +14,13 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/folder"
-            android:paddingLeft="25dp"
+            android:paddingLeft="20dp"
             android:paddingBottom="2dp"
             android:textAllCaps="true"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:fontFamily="san-serif-light"
-            android:id="@+id/headerText"/>
+            android:id="@+id/headerText"
+            android:textColor="@color/header_text_color"/>
 
     <View
             android:layout_width="match_parent"

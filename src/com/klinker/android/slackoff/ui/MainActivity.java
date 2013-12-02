@@ -2,21 +2,31 @@ package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+<<<<<<< HEAD
+=======
+import android.net.Uri;
+>>>>>>> fb4246a8007efbec95b9ab1a9da9495137b8e74d
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.*;
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.adapter.FileListAdapter;
 import com.klinker.android.slackoff.data.NoteFile;
+import com.klinker.android.slackoff.utils.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Comparator;
 
 public class MainActivity extends Activity {
 
     private ListView folderList;
     private FileListAdapter folderAdapter;
-    private ListView fileList;
+    private AbsListView fileList;
     private FileListAdapter fileAdapter;
 
     private boolean portrait;
@@ -24,61 +34,132 @@ public class MainActivity extends Activity {
     private ArrayList<NoteFile> files;
     private ArrayList<NoteFile> folders;
 
+    private File parent;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         folderList = (ListView) findViewById(R.id.folderList);
-        fileList = (ListView) findViewById(R.id.fileList);
+        fileList = (AbsListView) findViewById(R.id.fileList);
 
         portrait = folderList.getTag().equals("portrait");
 
         files = new ArrayList<NoteFile>();
-        files.add(new NoteFile(false, "/", "note 1"));
-        files.add(new NoteFile(false,"/", "note 2"));
-        files.add(new NoteFile(false, "/", "note 3"));
-        files.add(new NoteFile(false, "/", "note 4"));
-        files.add(new NoteFile(false, "/", "note 5"));
-        files.add(new NoteFile(false, "/", "note 6"));
-        files.add(new NoteFile(false, "/", "note 7"));
-        files.add(new NoteFile(false, "/", "note 8"));
-
         folders = new ArrayList<NoteFile>();
-        folders.add(new NoteFile(true, "/", "folder 1"));
-        folders.add(new NoteFile(true, "/", "folder 2"));
-        folders.add(new NoteFile(true, "/", "folder 3"));
-        folders.add(new NoteFile(true, "/", "folder 4"));
-        folders.add(new NoteFile(true, "/", "folder 5"));
-        folders.add(new NoteFile(true, "/", "folder 6"));
-        folders.add(new NoteFile(true, "/", "folder 7"));
-        folders.add(new NoteFile(true, "/", "folder 8"));
+
+        if (getIntent().getStringExtra("parent_file") != null) {
+            parent = new File(getIntent().getStringExtra("parent_file"));
+            setTitle(parent.getName());
+        } else {
+            parent = Environment.getExternalStorageDirectory();
+        }
+
+        File[] dirFiles = parent.listFiles();
+        Arrays.sort(dirFiles, fileComparator);
+
+        for (File file : dirFiles) {
+            if (file.isDirectory()) {
+                folders.add(new NoteFile(file));
+            } else {
+                files.add(new NoteFile(file));
+            }
+        }
 
         folderAdapter = new FileListAdapter(MainActivity.this, folders, true);
         fileAdapter = new FileListAdapter(MainActivity.this, files, false);
 
         if (portrait) {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) folderList.getLayoutParams();
-            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48 * (folderAdapter.getCount()) - 35, getResources().getDisplayMetrics());
+            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 49 * (folderAdapter.getCount()) + 25, getResources().getDisplayMetrics());
             folderList.setLayoutParams(params);
 
             params = (RelativeLayout.LayoutParams) fileList.getLayoutParams();
-            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48 * (fileAdapter.getCount()) - 35, getResources().getDisplayMetrics());
+            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 49 * (fileAdapter.getCount()) + 25, getResources().getDisplayMetrics());
             fileList.setLayoutParams(params);
-        }
 
+            if (folders.size() == 0) {
+                findViewById(R.id.divider).setVisibility(View.GONE);
+                findViewById(R.id.none).setVisibility(View.VISIBLE);
+            }
+
+            if (files.size() == 0) {
+                findViewById(R.id.divider2).setVisibility(View.GONE);
+                findViewById(R.id.none2).setVisibility(View.VISIBLE);
+            }
+        }
 
         View folderHeader = getLayoutInflater().inflate(R.layout.list_header, null, false);
         ((TextView) folderHeader.findViewById(R.id.headerText)).setText(getString(R.string.folder));
         folderList.addHeaderView(folderHeader);
 
-        View fileHeader = getLayoutInflater().inflate(R.layout.list_header, null, false);
-        ((TextView) fileHeader.findViewById(R.id.headerText)).setText(getString(R.string.file));
-        fileList.addHeaderView(fileHeader);
+        if (fileList instanceof ListView) {
+            View fileHeader = getLayoutInflater().inflate(R.layout.list_header, null, false);
+            ((TextView) fileHeader.findViewById(R.id.headerText)).setText(getString(R.string.file));
+            ((ListView) fileList).addHeaderView(fileHeader);
+        } else {
+            ((TextView) findViewById(R.id.fileHeader).findViewById(R.id.headerText)).setText(getString(R.string.file));
+            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+            int padding2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 7, getResources().getDisplayMetrics());
+            folderHeader.setPadding(padding2, 0, padding2, padding);
+        }
 
         folderList.setAdapter(folderAdapter);
         fileList.setAdapter(fileAdapter);
 
+        folderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i != 0) {
+                    Intent nextFolder = new Intent(MainActivity.this, MainActivity.class);
+                    nextFolder.putExtra("parent_file", folders.get(i - 1).getPath());
+                    startActivity(nextFolder);
+                }
+            }
+        });
+
+        fileList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (portrait) {
+                    i--;
+                }
+
+                if (i >= 0) {
+                    Intent fileIntent = new Intent(Intent.ACTION_VIEW);
+                    fileIntent.setDataAndType(Uri.fromFile(files.get(i).getFile()), Utils.getMimeType(files.get(i).getPath()));
+                    fileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    try {
+                        startActivity(fileIntent);
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, getString(R.string.no_activities), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+
         startService(new Intent(this, OverNoteService.class));
     }
+
+    Comparator<File> fileComparator = new Comparator<File>() {
+        @Override
+        public int compare(File file1, File file2) {
+            if (file1.isDirectory()) {
+                if (file2.isDirectory()) {
+                    return String.valueOf(file1.getName().toLowerCase()).compareTo(file2.getName().toLowerCase());
+                } else {
+                    return -1;
+                }
+            } else {
+                if (file2.isDirectory()) {
+                    return 1;
+                } else {
+                    return String.valueOf(file1.getName().toLowerCase()).compareTo(file2.getName().toLowerCase());
+                }
+            }
+
+        }
+    };
 }

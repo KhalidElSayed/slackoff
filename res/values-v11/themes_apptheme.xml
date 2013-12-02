@@ -5,14 +5,11 @@
 
   <style name="AppTheme" parent="android:Theme.Holo.Light">
 
+    <item name="android:windowBackground">@color/window_background</item>
     <item name="android:editTextBackground">@drawable/apptheme_edit_text_holo_light</item>
-
     <item name="android:buttonStyle">@style/ButtonAppTheme</item>
-
     <item name="android:imageButtonStyle">@style/ImageButtonAppTheme</item>
-
     <item name="android:listChoiceBackgroundIndicator">@drawable/apptheme_list_selector_holo_light</item>
-
     <item name="android:activatedBackgroundIndicator">@drawable/apptheme_activated_background_holo_light</item>
 
   </style>
