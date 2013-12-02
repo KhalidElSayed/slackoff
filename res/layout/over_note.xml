@@ -15,7 +15,7 @@
            android:layout_width="0dp"
            android:layout_height="wrap_content"
            android:layout_weight="1"
-           android:background="@drawable/pressed_button"
+           android:background="@drawable/pressed_button_over_note"
            android:text="@string/discard"
            android:id="@+id/discard"/>
 
@@ -23,7 +23,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/pressed_button"
+            android:background="@drawable/pressed_button_over_note"
             android:text="@string/save"
             android:id="@+id/save"/>
         </LinearLayout>
