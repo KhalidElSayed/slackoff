@@ -289,6 +289,9 @@ public class BrowserActivity extends Activity {
         }
     };
 
+    /**
+     * Overrides the onresume method so that we can kill the popup note service, that way both aren't shown at the same time
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -297,6 +300,9 @@ public class BrowserActivity extends Activity {
         sendBroadcast(killNotes);
     }
 
+    /**
+     * Overrides the onpause method so that we can restart the popup note service when we exit
+     */
     @Override
     public void onPause() {
         // starts  the service
