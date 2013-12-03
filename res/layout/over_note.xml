@@ -35,7 +35,7 @@
         android:id="@+id/name"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:inputType="textAutoComplete|textAutoCorrect|textCapSentences"/>
+        android:inputType="textAutoComplete|textAutoCorrect|textCapWords"/>
 
     <EditText
         android:layout_width="match_parent"

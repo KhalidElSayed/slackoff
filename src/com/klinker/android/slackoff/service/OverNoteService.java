@@ -258,6 +258,10 @@ public class OverNoteService extends Service {
                 name.clearFocus();
                 content.clearFocus();
 
+                // clears out the text
+                name.clearComposingText();
+                content.clearComposingText();
+
                 // here we are going to actually remove the view and re-add it
                 // I do it this way because there are only system level animations that can be applied to alert dialogs
                 // and this is the way to run that animation. simply updating the view doesn't do it
