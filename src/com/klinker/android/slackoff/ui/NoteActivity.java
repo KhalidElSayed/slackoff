@@ -1,14 +1,10 @@
 package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ListActivity;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.*;
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.adapter.NoteItemAdapter;
@@ -16,7 +12,6 @@ import com.klinker.android.slackoff.utils.IOUtils;
 import com.klinker.android.slackoff.utils.Utils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -36,7 +31,7 @@ public class NoteActivity extends Activity {
     /**
      * The list view to display our notes
      */
-    private ListView mList;
+    private ListView list;
 
     /**
      * the adapter for our listview
@@ -99,7 +94,7 @@ public class NoteActivity extends Activity {
             notes = new ArrayList<String>(Arrays.asList(note.split("\n")));
         } else {
             // this is a new note with nothing in it
-            checkable = true;
+            checkable = false;
 
             notes = new ArrayList<String>();
             notes.add("_[1]_test1");
@@ -107,10 +102,11 @@ public class NoteActivity extends Activity {
         }
 
         // add the footer view to the bottom of the list so that there is always a way to add another bullet point
-        mList = (ListView) findViewById(R.id.listView);
+        list = (ListView) findViewById(R.id.listView);
         adapter = new NoteItemAdapter(this, notes, checkable);
-        mList.setAdapter(adapter);
-        mList.addFooterView(getLayoutInflater().inflate(R.layout.note_item, null, false));
+        list.setAdapter(adapter);
+        list.setItemsCanFocus(true);
+        list.addFooterView(getLayoutInflater().inflate(R.layout.note_item, null, false));
     }
 
     /**
@@ -138,6 +134,7 @@ public class NoteActivity extends Activity {
                 item.setChecked(!item.isChecked());
                 checkable = item.isChecked();
                 adapter.setCheckBoxes(checkable);
+                adapter.notifyDataSetChanged();
                 return true;
         }
 

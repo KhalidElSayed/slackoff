@@ -2,6 +2,8 @@ package com.klinker.android.slackoff.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +70,7 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
      * @return the final view to be shown
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         // use the recycled view
         View rowView = convertView;
 
