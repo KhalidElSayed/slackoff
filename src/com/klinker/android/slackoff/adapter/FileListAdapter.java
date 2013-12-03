@@ -58,7 +58,7 @@ public class FileListAdapter extends ArrayAdapter<NoteFile> {
     }
 
     /**
-     * Gets the view to be shown in the list (uses view recycling for efficiency
+     * Gets the view to be shown in the list (uses view recycling for efficiency)
      * @param position the position of the item in the list
      * @param convertView the recycled view
      * @param parent the parent of the recycled view

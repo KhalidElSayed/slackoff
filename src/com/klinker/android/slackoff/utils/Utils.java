@@ -13,6 +13,9 @@ import java.io.File;
  */
 public class Utils {
 
+    /**
+     * The extension that will be used for all note files created by slackoff
+     */
     public static final String EXTENSION = ".klink";
 
     /**
