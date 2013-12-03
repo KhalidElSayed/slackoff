@@ -29,7 +29,7 @@ public class IOUtils {
     public static boolean writeFile(String className, String text, String title) {
         try {
             // creates the file and the directory if it isn't there yet
-            File mText = new File(Environment.getExternalStorageDirectory() + "/SlackOff/" + className + "/" + title.replaceAll(" ", "_") + ".klink");
+            File mText = new File(Environment.getExternalStorageDirectory() + "/SlackOff/" + className + "/" + title.replaceAll(" ", "_") + Utils.EXTENSION);
             File dir = new File(Environment.getExternalStorageDirectory() + "/SlackOff/" + className);
             dir.mkdirs();
 

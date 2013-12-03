@@ -164,7 +164,7 @@ public class BrowserActivity extends Activity {
             if (file.isDirectory()) {
                 folders.add(new NoteFile(file));
             } else {
-                if (file.getName().endsWith(".klink")) {
+                if (file.getName().endsWith(Utils.EXTENSION)) {
                     files.add(new NoteFile(file));
                 }
             }
@@ -430,7 +430,7 @@ public class BrowserActivity extends Activity {
                                 } else {
                                     // we are creating a note file...
                                     try {
-                                        File file = new File(parent, ((EditText) v.findViewById(R.id.fileName)).getText().toString() + ".klink");
+                                        File file = new File(parent, ((EditText) v.findViewById(R.id.fileName)).getText().toString() + Utils.EXTENSION);
                                         if (!file.exists()) {
                                             file.createNewFile();
                                         } else {

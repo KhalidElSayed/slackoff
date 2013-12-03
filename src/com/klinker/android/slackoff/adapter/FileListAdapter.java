@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.data.NoteFile;
+import com.klinker.android.slackoff.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -83,7 +84,7 @@ public class FileListAdapter extends ArrayAdapter<NoteFile> {
 
         // finds specified view holder and sets the text correctly
         ViewHolder holder = (ViewHolder) rowView.getTag();
-        holder.fileName.setText(files.get(position).getName().replace(".klink", " " + context.getString(R.string.notes_file)));
+        holder.fileName.setText(files.get(position).getName().replace(Utils.EXTENSION, " " + context.getString(R.string.notes_file)));
         holder.lastModified.setText(files.get(position).getDate());
 
         return rowView;

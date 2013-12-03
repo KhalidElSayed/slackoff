@@ -34,6 +34,7 @@
     <string name="set_days">Set the days:</string>
     <string name="start_time">Start Time:</string>
     <string name="end_time">End Time:</string>
+    <string name="note_title">Add Title</string>
 
     <!-- Days of the Week -->
     <string name="sunday">Sunday</string>
