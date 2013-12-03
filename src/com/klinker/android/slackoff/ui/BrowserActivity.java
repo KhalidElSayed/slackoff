@@ -2,6 +2,8 @@ package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +22,7 @@ import com.klinker.android.slackoff.adapter.ClassesCursorAdapter;
 import com.klinker.android.slackoff.adapter.FileListAdapter;
 import com.klinker.android.slackoff.data.NoteFile;
 import com.klinker.android.slackoff.data.SchoolClass;
+import com.klinker.android.slackoff.listeners.AddClassListener;
 import com.klinker.android.slackoff.service.OverNoteService;
 import com.klinker.android.slackoff.sql.SchoolData;
 import com.klinker.android.slackoff.utils.IOUtils;
@@ -86,6 +89,7 @@ public class BrowserActivity extends Activity {
      */
     private File parent;
 
+
     /**
      * First step in an activity lifecycle which creates the views
      * @param savedInstanceState
@@ -148,6 +152,7 @@ public class BrowserActivity extends Activity {
             // shows the drawer icon on the action bar
             getActionBar().setDisplayHomeAsUpEnabled(true);
             getActionBar().setHomeButtonEnabled(true);
+
         }
 
         // get a list of all files in the parent directory and sort them in alphabetical order
@@ -276,11 +281,11 @@ public class BrowserActivity extends Activity {
         drawerList.addFooterView(footer);
         drawerList.setAdapter(new ClassesCursorAdapter(this, data.getCursor()));
 
-        //data.addClass(new SchoolClass("Circuits", new Date().getTime(), new Date().getTime() + 1000 * 60 * 60, "M W F"));
+        footer.setOnClickListener(new AddClassListener(this, drawerList));
 
         // starts  the service
         // TODO: check if they have a class going on before starting it
-        startService(new Intent(this, OverNoteService.class));
+        // startService(new Intent(this, OverNoteService.class));
     }
 
     /**

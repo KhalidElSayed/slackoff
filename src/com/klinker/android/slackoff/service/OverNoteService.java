@@ -276,7 +276,14 @@ public class OverNoteService extends Service {
                 // makes sure they aren't blank
                 if(name.getText().length() > 0 && content.getText().length() > 0) {
                     // save has been clicked. we want to save the data, then simulate a discard clicked
-                    IOUtils.writeFile(mContext, content.getText().toString(), name.getText().toString());
+
+                    // use a thread so that the io doesn't clog up the ui thread
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            IOUtils.writeFile(mContext, content.getText().toString(), name.getText().toString());
+                        }
+                    }).start();
 
                     // simulated discard to clear and reset window
                     discard.performClick();
