@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.adapter.ClassesCursorAdapter;
 import com.klinker.android.slackoff.adapter.FileListAdapter;
 import com.klinker.android.slackoff.data.NoteFile;
+import com.klinker.android.slackoff.data.SchoolClass;
 import com.klinker.android.slackoff.service.OverNoteService;
 import com.klinker.android.slackoff.sql.SchoolData;
 import com.klinker.android.slackoff.utils.Utils;
@@ -234,6 +236,7 @@ public class BrowserActivity extends Activity {
 
                 if (i >= 0) {
                     Intent fileIntent = new Intent(Intent.ACTION_VIEW);
+                    Log.v("mime_type", Utils.getMimeType(files.get(i).getPath()));
                     fileIntent.setDataAndType(Uri.fromFile(files.get(i).getFile()), Utils.getMimeType(files.get(i).getPath()));
                     fileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -272,9 +275,11 @@ public class BrowserActivity extends Activity {
         drawerList.addFooterView(footer);
         drawerList.setAdapter(new ClassesCursorAdapter(this, data.getCursor()));
 
+        //data.addClass(new SchoolClass("Circuits", new Date().getTime(), new Date().getTime() + 1000 * 60 * 60, "M W F"));
+
         // starts  the service
         // TODO: check if they have a class going on before starting it
-        startService(new Intent(this, OverNoteService.class));
+        //startService(new Intent(this, OverNoteService.class));
     }
 
     /**

@@ -154,10 +154,20 @@ public class ClassesCursorAdapter extends CursorAdapter {
         holder.name.setText(mName);
         holder.days.setText(mDays);
 
+        // Formatting the start date
         Date startDate = new Date(mStart);
-        holder.start.setText(startDate.getHours() + ":" + startDate.getMinutes());
+        int mHours = startDate.getHours();
+        int mMins = startDate.getMinutes();
+        String hours = mHours < 13 ? mHours + "" :  mHours - 12 + "";
+        String mins = mMins < 10 ? "0" + mMins : mMins + "";
+        holder.start.setText(hours + ":" + mins);
 
+        // Formatting the end date
         Date endDate = new Date(mEnd);
-        holder.end.setText(endDate.getHours() + ":" + endDate.getMinutes());
+        mHours = endDate.getHours();
+        mMins = endDate.getMinutes();
+        hours = mHours < 13 ? mHours + "" :  mHours - 12 + "";
+        mins = mMins < 10 ? "0" + mMins : mMins + "";
+        holder.end.setText(hours + ":" + mins);
     }
 }
