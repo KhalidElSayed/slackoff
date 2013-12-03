@@ -28,6 +28,18 @@
     <string name="error_creating_file">Error creating file</string>
     <string name="file_exists">File already exists!</string>
     <string name="add_new">Add New</string>
+    <string name="next_instance_of_class">Next Instance of the Class:</string>
+    <string name="class_name">Class name...</string>
+    <string name="set_days">Set the days</string>
+
+    <!-- Days of the Week -->
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
 
     <!-- OverNote Strings -->
     <string name="note_name_hint">Note Name…</string>

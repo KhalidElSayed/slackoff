@@ -2,6 +2,7 @@ package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -148,6 +149,7 @@ public class BrowserActivity extends Activity {
             // shows the drawer icon on the action bar
             getActionBar().setDisplayHomeAsUpEnabled(true);
             getActionBar().setHomeButtonEnabled(true);
+
         }
 
         // get a list of all files in the parent directory and sort them in alphabetical order
@@ -275,6 +277,84 @@ public class BrowserActivity extends Activity {
         View footer = getLayoutInflater().inflate(R.layout.add_class, null, false);
         drawerList.addFooterView(footer);
         drawerList.setAdapter(new ClassesCursorAdapter(this, data.getCursor()));
+
+        footer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // create a new class
+
+                // creates a dialog from the new class dialog xml file
+                final Dialog dialog = new Dialog(BrowserActivity.this);
+                dialog.setContentView(R.layout.date_dialog);
+                // sets the title
+                dialog.setTitle(getResources().getString(R.string.next_instance_of_class));
+
+                // gets the elements
+                final DatePicker date = (DatePicker) dialog.findViewById(R.id.datePicker);
+                final TimePicker startTime = (TimePicker) dialog.findViewById(R.id.startTimePicker);
+                final TimePicker endTime = (TimePicker) dialog.findViewById(R.id.endTimePicker);
+                final EditText name = (EditText) dialog.findViewById(R.id.class_name);
+                Button save = (Button) dialog.findViewById(R.id.save);
+                Button cancel = (Button) dialog.findViewById(R.id.cancel);
+
+                // sets the save listener
+                save.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        // get the data
+                        int month = date.getMonth();
+                        int day = date.getDayOfMonth();
+                        int year = date.getYear();
+                        int startHour = startTime.getCurrentHour();
+                        int startMinute = startTime.getCurrentMinute();
+                        int endHour = endTime.getCurrentHour();
+                        int endMinute = endTime.getCurrentMinute();
+
+                        Date setDate = new Date(year,month,day,startHour,startMinute);
+                        final long setTime = setDate.getTime();
+
+                        setDate = new Date(year,month,day,endHour,endMinute);
+                        final long endTime = setDate.getTime();
+
+                        // dismiss the date picker dialog
+                        dialog.dismiss();
+
+                        // Open the repeat dialog
+                        final Dialog repeat = new Dialog(BrowserActivity.this);
+                        repeat.setContentView(R.layout.repeated_dialog);
+                        repeat.setTitle(getResources().getString(R.string.set_days));
+
+                        Button repeatSave = (Button) repeat.findViewById(R.id.save);
+
+                        repeatSave.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                boolean sunday = ((CheckBox) repeat.findViewById(R.id.sunday)).isChecked();
+                                boolean monday = ((CheckBox) repeat.findViewById(R.id.monday)).isChecked();
+                                boolean tuesday = ((CheckBox) repeat.findViewById(R.id.tuesday)).isChecked();
+                                boolean wednesday = ((CheckBox) repeat.findViewById(R.id.wednesday)).isChecked();
+                                boolean thursday = ((CheckBox) repeat.findViewById(R.id.thursday)).isChecked();
+                                boolean friday = ((CheckBox) repeat.findViewById(R.id.friday)).isChecked();
+                                boolean saturday = ((CheckBox) repeat.findViewById(R.id.saturday)).isChecked();
+                            }
+                        });
+
+                        repeat.show();
+                    }
+                });
+
+                // sets the cancel listener
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // do nothing
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
 
         //data.addClass(new SchoolClass("Circuits", new Date().getTime(), new Date().getTime() + 1000 * 60 * 60, "M W F"));
 
