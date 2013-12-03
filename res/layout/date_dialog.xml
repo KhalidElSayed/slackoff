@@ -39,7 +39,8 @@
             android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:text="@string/save"
+            android:text="@string/next"
+            android:inputType="textCapWords|textAutoComplete|textAutoCorrect"
             android:background="@drawable/pressed_button_over_note" />
 
         </LinearLayout>

@@ -28,9 +28,12 @@
     <string name="error_creating_file">Error creating file</string>
     <string name="file_exists">File already exists!</string>
     <string name="add_new">Add New</string>
-    <string name="next_instance_of_class">Next Instance of the Class:</string>
+    <string name="next">Next</string>
+    <string name="next_instance_of_class">Next Date of the Class:</string>
     <string name="class_name">Class name...</string>
-    <string name="set_days">Set the days</string>
+    <string name="set_days">Set the days:</string>
+    <string name="start_time">Start Time:</string>
+    <string name="end_time">End Time:</string>
 
     <!-- Days of the Week -->
     <string name="sunday">Sunday</string>
