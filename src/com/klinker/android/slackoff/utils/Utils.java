@@ -13,6 +13,8 @@ import java.io.File;
  */
 public class Utils {
 
+    public static final String EXTENSION = ".klink";
+
     /**
      * Gets the mime type of the specified file so that it can be opened in correct app
      * @param url the path to the file
