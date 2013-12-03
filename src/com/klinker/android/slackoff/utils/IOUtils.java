@@ -2,11 +2,18 @@ package com.klinker.android.slackoff.utils;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Environment;
 
 import com.klinker.android.slackoff.data.SchoolClass;
 import com.klinker.android.slackoff.sql.SchoolData;
 import com.klinker.android.slackoff.sql.SchoolHelper;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Date;
 
 public class IOUtils {
@@ -14,26 +21,58 @@ public class IOUtils {
     /**
      * Function to write a note to a file
      *
-     * @param context The applications context
-     * @param path The data path to the folder that the note should be written to
+     * @param text The text to write to the file
+     * @param title the title of the note
+     * @param className The data path to the folder that the note should be written to
      * @return whether the file was written successfully or not
      */
-    public boolean writeFile(Context context, String path) {
-        return true;
+    public static boolean writeFile(String className, String text, String title) {
+        try {
+            // creates the file and the directory if it isn't there yet
+            File mText = new File(Environment.getExternalStorageDirectory() + "/SlackOff/" + className + "/" + title.replaceAll(" ", "_") + ".klink");
+            File dir = new File(Environment.getExternalStorageDirectory() + "/SlackOff/" + className);
+            dir.mkdirs();
+
+            // will overwrite the original file if it exists
+            if (mText.exists()) {
+                mText.delete();
+            }
+
+            // creates the output stream and writes to the file we made
+            OutputStreamWriter output;
+            output = new OutputStreamWriter(new FileOutputStream(mText, true));
+
+            output.write(title + "\n\n\n");
+            output.append(text);
+
+            output.close();
+
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
      * Function to write the file to whatever class is currently running
      * This method will be called from the OverNote service because there won't be a way to set any pathes to the notes
+     *
      * @param context Context of the app
      * @return true if it was written successfully
      */
-    public boolean writeFile(Context context) {
-        String path = getCurrentClassPath(context);
-        return writeFile(context, path);
+    public static boolean writeFile(Context context, String text, String title) {
+        String path = getCurrentClass(context);
+        return writeFile(path, text, title);
     }
 
-    public String getCurrentClassPath(Context context) {
+    /**
+     * Function to get the name of the ongoing class and return it as a string
+     *
+     * @param context Context of the app
+     * @return ongoing class as a path
+     */
+    public static String getCurrentClass(Context context) {
         String name = "";
 
         // opens up the school database to read from
@@ -73,6 +112,6 @@ public class IOUtils {
 
         // return the path no matter what, if it is still blank, then the note will be placed in the root.
         // it shouldn't be black though or there has been an error with the cursor
-        return "/SlackOff/" + name;
+        return name;
     }
 }

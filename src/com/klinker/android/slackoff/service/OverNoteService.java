@@ -27,6 +27,7 @@ import android.widget.EditText;
 
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.ui.BrowserActivity;
+import com.klinker.android.slackoff.utils.IOUtils;
 
 /**
  * Service which controls overnote
@@ -269,6 +270,7 @@ public class OverNoteService extends Service {
             @Override
             public void onClick(View view) {
                 // save has been clicked. we want to save the data, then simulate a discard clicked
+                IOUtils.writeFile("Circuits", content.getText().toString(), name.getText().toString());
 
                 // simulated discard to clear and reset window
                 discard.performClick();

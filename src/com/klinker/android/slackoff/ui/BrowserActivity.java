@@ -22,6 +22,7 @@ import com.klinker.android.slackoff.data.NoteFile;
 import com.klinker.android.slackoff.data.SchoolClass;
 import com.klinker.android.slackoff.service.OverNoteService;
 import com.klinker.android.slackoff.sql.SchoolData;
+import com.klinker.android.slackoff.utils.IOUtils;
 import com.klinker.android.slackoff.utils.Utils;
 
 import java.io.File;
@@ -279,7 +280,7 @@ public class BrowserActivity extends Activity {
 
         // starts  the service
         // TODO: check if they have a class going on before starting it
-        //startService(new Intent(this, OverNoteService.class));
+        startService(new Intent(this, OverNoteService.class));
     }
 
     /**
