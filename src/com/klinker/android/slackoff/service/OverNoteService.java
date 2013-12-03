@@ -273,11 +273,14 @@ public class OverNoteService extends Service {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // save has been clicked. we want to save the data, then simulate a discard clicked
-                IOUtils.writeFile("Circuits", content.getText().toString(), name.getText().toString());
+                // makes sure they aren't blank
+                if(name.getText().length() > 0 && content.getText().length() > 0) {
+                    // save has been clicked. we want to save the data, then simulate a discard clicked
+                    IOUtils.writeFile(mContext, content.getText().toString(), name.getText().toString());
 
-                // simulated discard to clear and reset window
-                discard.performClick();
+                    // simulated discard to clear and reset window
+                    discard.performClick();
+                }
             }
         });
 
