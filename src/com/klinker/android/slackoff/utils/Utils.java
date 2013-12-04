@@ -48,22 +48,4 @@ public class Utils {
     public static int toDP(Context context, double px) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) px, context.getResources().getDisplayMetrics());
     }
-
-    /**
-     * Recursive method to delete all underlying files before deleting the current file to be sure that it is gone
-     *
-     * @param file the file to be deleted
-     */
-    public static void deleteDirectory(File file) {
-        if (!file.isDirectory() || file.list().length <= 0) {
-            file.delete();
-        } else {
-            for (File f : file.listFiles()) {
-                deleteDirectory(f);
-                f.delete();
-            }
-        }
-
-        file.delete();
-    }
 }

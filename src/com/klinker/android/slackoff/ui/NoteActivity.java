@@ -1,6 +1,7 @@
 package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -168,6 +169,11 @@ public class NoteActivity extends Activity {
                 item.setChecked(!item.isChecked());
                 checkable = item.isChecked();
                 adapter.setCheckBoxes(checkable);
+                return true;
+            case R.id.menu_delete:
+                IOUtils.deleteDirectory(new File(pathToNote));
+                finish();
+                sendBroadcast(new Intent(BrowserActivity.REFRESH_BROADCAST));
                 return true;
         }
 

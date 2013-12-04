@@ -149,4 +149,22 @@ public class IOUtils {
         // it shouldn't be black though or there has been an error with the cursor
         return name;
     }
+
+    /**
+     * Recursive method to delete all underlying files before deleting the current file to be sure that it is gone
+     *
+     * @param file the file to be deleted
+     */
+    public static void deleteDirectory(File file) {
+        if (!file.isDirectory() || file.list().length <= 0) {
+            file.delete();
+        } else {
+            for (File f : file.listFiles()) {
+                deleteDirectory(f);
+                f.delete();
+            }
+        }
+
+        file.delete();
+    }
 }

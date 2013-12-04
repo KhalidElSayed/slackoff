@@ -2,8 +2,7 @@ package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +20,7 @@ import com.klinker.android.slackoff.adapter.FileListAdapter;
 import com.klinker.android.slackoff.data.NoteFile;
 import com.klinker.android.slackoff.listeners.AddClassListener;
 import com.klinker.android.slackoff.sql.SchoolData;
+import com.klinker.android.slackoff.utils.IOUtils;
 import com.klinker.android.slackoff.utils.Utils;
 
 import java.io.File;
@@ -35,6 +35,12 @@ import java.util.Comparator;
  * @author Jake and Luke Klinker
  */
 public class BrowserActivity extends Activity {
+
+    /**
+     * Broadcast to listen for to force the activity to refresh itself, this may happen when the user deletes a note
+     * from the note activity
+     */
+    public static final String REFRESH_BROADCAST = "com.klinker.android.slackoff.REFRESH";
 
     /**
      * The listview to hold all folders in the parent file
@@ -350,7 +356,7 @@ public class BrowserActivity extends Activity {
                                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                Utils.deleteDirectory(noteFile.getFile());
+                                                IOUtils.deleteDirectory(noteFile.getFile());
                                                 recreate();
                                             }
                                         })
@@ -368,7 +374,7 @@ public class BrowserActivity extends Activity {
     /**
      * the comparator used to determine alphabetical order of files when they are being sorted
      */
-    Comparator<File> fileComparator = new Comparator<File>() {
+    private Comparator<File> fileComparator = new Comparator<File>() {
         @Override
         public int compare(File file1, File file2) {
             if (file1.isDirectory()) {
@@ -385,6 +391,16 @@ public class BrowserActivity extends Activity {
                 }
             }
 
+        }
+    };
+
+    /**
+     * receiver to recreate activity if needed
+     */
+    private BroadcastReceiver refreshReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            recreate();
         }
     };
 
@@ -466,5 +482,25 @@ public class BrowserActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.browser_activity, menu);
         return true;
+    }
+
+    /**
+     * Called when activity is started and registers refresh receiver
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(REFRESH_BROADCAST);
+        registerReceiver(refreshReceiver, filter);
+    }
+
+    /**
+     * Called when activity is stopped, needs to unregister receiver
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        unregisterReceiver(refreshReceiver);
     }
 }
