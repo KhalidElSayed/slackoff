@@ -88,7 +88,7 @@ public class NoteActivity extends Activity {
 
         if (!note.equals("")) {
             // this is a previously created note
-            if (note.contains(CHECKABLE)) {
+            if (note.startsWith(CHECKABLE)) {
                 checkable = true;
                 note = note.replace(CHECKABLE, "");
             } else {
@@ -108,7 +108,7 @@ public class NoteActivity extends Activity {
             notes = new ArrayList<String>();
             notes.add("");
 
-            title.setText(file.getName().replace(Utils.EXTENSION, " " + getString(R.string.notes_file)));
+            title.setText(file.getName().replace(Utils.EXTENSION, ""));
         }
 
         // set up the listview stuff

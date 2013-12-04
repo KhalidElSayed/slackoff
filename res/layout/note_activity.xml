@@ -16,7 +16,7 @@
               android:background="@null"
               android:gravity="center"
               android:hint="@string/note_title"
-              android:id="@+id/title"/>
+              android:id="@+id/title" android:capitalize="words"/>
 
     <View android:background="@color/app_color"
           android:layout_width="match_parent"

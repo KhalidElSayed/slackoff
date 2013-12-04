@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 /**
- * Main activity for app, which is a simple file browser
+ * Main activity for app, which is a simple, beautiful file browser
  *
  * @author Jake and Luke Klinker
  */

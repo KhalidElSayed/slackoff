@@ -108,6 +108,7 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
             viewHolder.image = (ImageView) rowView.findViewById(R.id.imageView);
             viewHolder.discard = (ImageButton) rowView.findViewById(R.id.deleteButton);
 
+            // listen for user typing into the text box
             viewHolder.note.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
@@ -118,6 +119,14 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
                 @Override
                 public void afterTextChanged(Editable editable) {
                     notes.set(viewHolder.note.getId(), (viewHolder.checkBox.isChecked() ? CHECKED : UNCHECKED) + editable.toString());
+                }
+            });
+
+            // listen for the checkbox state change
+            viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    notes.set(viewHolder.note.getId(), (viewHolder.checkBox.isChecked() ? CHECKED : UNCHECKED) + viewHolder.note.getText().toString());
                 }
             });
 
