@@ -20,10 +20,24 @@ public class IOUtils {
      * @return whether the file was written successfully or not
      */
     public static boolean writeFile(String className, String text, String title) {
+        return writeToPath(Environment.getExternalStorageDirectory() + "/SlackOff/" + className + "/" + title.replaceAll(" ", "_") + Utils.EXTENSION,
+                text,
+                title);
+    }
+
+    /**
+     * Function to write a note to a given path
+     *
+     * @param path the path to write the note to
+     * @param text the text to write for the note
+     * @param title the title to save for the note
+     * @return whether the file was written successfully or not
+     */
+    public static boolean writeToPath(String path, String text, String title) {
         try {
             // creates the file and the directory if it isn't there yet
-            File mText = new File(Environment.getExternalStorageDirectory() + "/SlackOff/" + className + "/" + title.replaceAll(" ", "_") + Utils.EXTENSION);
-            File dir = new File(Environment.getExternalStorageDirectory() + "/SlackOff/" + className);
+            File mText = new File(path);
+            File dir = mText.getParentFile();
             dir.mkdirs();
 
             // will overwrite the original file if it exists

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.adapter.NoteItemAdapter;
 import com.klinker.android.slackoff.utils.IOUtils;
@@ -56,6 +57,11 @@ public class NoteActivity extends Activity {
     private boolean checkable;
 
     /**
+     * Holds the location of the note to overwrite later
+     */
+    private String pathToNote;
+
+    /**
      * The first step of the activity lifecycle which will set up our view and initialize everything that we need
      * for the activity
      *
@@ -68,11 +74,14 @@ public class NoteActivity extends Activity {
 
         // get the uri passed through the intent for the opened file so we know what to display
         Uri fileUri = getIntent().getData();
-        File file = new File(fileUri.getPath());
+        pathToNote = fileUri.getPath();
+        File file = new File(pathToNote);
 
         // set the activities name to the title of the file
         setTitle(file.getName().replace(Utils.EXTENSION, " " + getString(R.string.notes_file)));
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        title = (EditText) findViewById(R.id.title);
 
         // get the notes for the specified file
         String note = IOUtils.readFile(file);
@@ -88,7 +97,6 @@ public class NoteActivity extends Activity {
 
             // process the title
             String titleText = note.substring(0, note.indexOf("\n"));
-            title = (EditText) findViewById(R.id.title);
             title.setText(titleText);
 
             note = note.replace("\n\n\n", "").substring(titleText.length());
@@ -97,20 +105,10 @@ public class NoteActivity extends Activity {
         } else {
             // this is a new note with nothing in it
             checkable = false;
-
             notes = new ArrayList<String>();
-            notes.add("_[1]_test1");
-            notes.add("_[0]_test 2 note");
-            notes.add("_[0]_test 2 note");
-            notes.add("_[0]_test 2 note");
-            notes.add("_[0]_test 2 note");
-            notes.add("_[0]_test 2 note");
-            notes.add("_[0]_test 2 note");
-            notes.add("_[0]_test 2 note");
-            notes.add("_[0]_test 2 note");
-            notes.add("_[0]_test 2 note");
-            notes.add("_[0]_test 2 note");
-            notes.add("_[0]_test 2 note");
+            notes.add("");
+
+            title.setText(file.getName().replace(Utils.EXTENSION, " " + getString(R.string.notes_file)));
         }
 
         // set up the listview stuff
@@ -140,7 +138,15 @@ public class NoteActivity extends Activity {
      * Saves our edited note to a file
      */
     private void saveNote() {
+        String note = "";
 
+        for (String n : adapter.getNotes()) {
+            note += n + "\n";
+        }
+
+        boolean success = IOUtils.writeToPath(pathToNote, note, (checkable ? CHECKABLE : "") + title.getText().toString());
+        Toast.makeText(this, getString(success ? R.string.saved_successfully : R.string.error_saving), Toast.LENGTH_LONG)
+                .show();
     }
 
     /**

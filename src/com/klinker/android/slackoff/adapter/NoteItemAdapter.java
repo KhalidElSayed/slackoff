@@ -22,6 +22,16 @@ import java.util.ArrayList;
 public class NoteItemAdapter extends ArrayAdapter<String> {
 
     /**
+     * Marks that item is checked
+     */
+    private static final String CHECKED = "_[1]_";
+
+    /**
+     * marks that item is not checked
+     */
+    private static final String UNCHECKED = "_[0]_";
+
+    /**
      * The notes to be displayed in the adapter
      */
     private ArrayList<String> notes;
@@ -107,7 +117,7 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    notes.set(viewHolder.note.getId(), editable.toString());
+                    notes.set(viewHolder.note.getId(), (viewHolder.checkBox.isChecked() ? CHECKED : UNCHECKED) + editable.toString());
                 }
             });
 
@@ -230,6 +240,14 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
         focusOn = getCount();
         notes.add("");
         notifyDataSetChanged();
+    }
+
+    /**
+     * Gets all of the notes in the current adapter which have been kept up to date as the user types
+     * @return the notes associated with each line
+     */
+    public ArrayList<String> getNotes() {
+        return this.notes;
     }
 
     /**

@@ -39,6 +39,8 @@
     <string name="new_line">New Line</string>
     <string name="attach_picture">Attach Picture</string>
     <string name="type_here">Type Here…</string>
+    <string name="saved_successfully">Saved Successfully</string>
+    <string name="error_saving">Error Saving File :(</string>
 
     <!-- Days of the Week -->
     <string name="sunday">Sunday</string>
