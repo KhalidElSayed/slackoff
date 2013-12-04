@@ -121,6 +121,12 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
             holder.image.setVisibility(View.GONE);
         }
 
+        if (holder.note.hasFocus()) {
+            holder.discard.setVisibility(View.VISIBLE);
+        } else {
+            holder.discard.setVisibility(View.GONE);
+        }
+
         holder.note.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
