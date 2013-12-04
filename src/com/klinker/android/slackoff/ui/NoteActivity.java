@@ -187,6 +187,15 @@ public class NoteActivity extends Activity {
     }
 
     /**
+     * sets up the checkable option in the menu
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.menu_checkable).setChecked(checkable);
+        return true;
+    }
+
+    /**
      * Controls back button behavior
      */
     @Override
