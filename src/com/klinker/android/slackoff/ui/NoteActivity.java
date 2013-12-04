@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -173,7 +174,13 @@ public class NoteActivity extends Activity {
             case R.id.menu_delete:
                 IOUtils.deleteDirectory(new File(pathToNote));
                 finish();
-                sendBroadcast(new Intent(BrowserActivity.REFRESH_BROADCAST));
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendBroadcast(new Intent(BrowserActivity.REFRESH_BROADCAST));
+                    }
+                }, 250);
                 return true;
         }
 
