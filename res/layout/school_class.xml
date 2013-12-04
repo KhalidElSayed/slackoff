@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:layout_marginBottom="10dp">
 
         <ImageButton
             android:layout_width="48dp"
@@ -21,14 +22,15 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/name"
                 android:textStyle="bold"
-                android:textSize="19dp"/>
+                android:textSize="20dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

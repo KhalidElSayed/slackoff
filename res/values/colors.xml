@@ -15,6 +15,6 @@
     <color name="light_drawer">#ffffff</color>
 
     <color name="light_text">#20000000</color>
-    <color name="dark_text">#000</color>
+    <color name="dark_text">#80000000</color>
 
 </resources>
