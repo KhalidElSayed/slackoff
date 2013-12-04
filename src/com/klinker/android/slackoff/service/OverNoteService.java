@@ -3,28 +3,16 @@ package com.klinker.android.slackoff.service;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Display;
-import android.view.GestureDetector;
-import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.ui.BrowserActivity;
 import com.klinker.android.slackoff.utils.IOUtils;
@@ -108,8 +96,9 @@ public class OverNoteService extends Service {
 
     /**
      * registers all of the necessary touch listeners on the window
+     *
      * @param height the height of the window
-     * @param width the width of the window
+     * @param width  the width of the window
      */
     private void setUpTouchListeners(final int height, final int width) {
         noteView.setOnTouchListener(new View.OnTouchListener() {
@@ -136,7 +125,7 @@ public class OverNoteService extends Service {
                         case MotionEvent.ACTION_MOVE:
 
                             // update my view and where it is at
-                            noteParamsUnfocused.x = (int)event.getRawX();
+                            noteParamsUnfocused.x = (int) event.getRawX();
                             noteParamsFocused.x = (int) event.getRawX();
                             noteWindow.updateViewLayout(noteView, noteParamsUnfocused);
 
@@ -157,6 +146,7 @@ public class OverNoteService extends Service {
 
     /**
      * Controls when the handle to pull the note in and out has been touched
+     *
      * @param event the motion event to check agains
      * @return true if handle has been touched
      */
@@ -174,7 +164,7 @@ public class OverNoteService extends Service {
         // sets it up on the screen. it will start at the edge and the user will be able to swipe it out
         noteParamsUnfocused = new WindowManager.LayoutParams(
                 (int) (width * .90),          // width of the note box
-                (int) (height* .40),           // height of the note box
+                (int) (height * .40),           // height of the note box
                 width - 40,           // 15 density pixels shown on on the right side of the screen
                 (int) (height * .08),        // starts 12.5% down the screen
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
@@ -191,7 +181,7 @@ public class OverNoteService extends Service {
         // so i use this to trick the system when i need that focus to enter text and bring up the keyboard
         noteParamsFocused = new WindowManager.LayoutParams(
                 (int) (width * .90),          // width of the note box
-                (int) (height* .40),           // height of the note box
+                (int) (height * .40),           // height of the note box
                 width - 40,           // 15 density pixels shown on on the right side of the screen
                 (int) (height * .08),        // starts 12.5% down the screen
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
@@ -274,7 +264,7 @@ public class OverNoteService extends Service {
             @Override
             public void onClick(View view) {
                 // makes sure they aren't blank
-                if(name.getText().length() > 0 && content.getText().length() > 0) {
+                if (name.getText().length() > 0 && content.getText().length() > 0) {
                     // save has been clicked. we want to save the data, then simulate a discard clicked
 
                     // use a thread so that the io doesn't clog up the ui thread
@@ -297,6 +287,7 @@ public class OverNoteService extends Service {
 
     /**
      * Binds the service
+     *
      * @param intent
      * @return
      */

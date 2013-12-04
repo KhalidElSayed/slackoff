@@ -35,6 +35,7 @@
     <string name="start_time">Start Time:</string>
     <string name="end_time">End Time:</string>
     <string name="note_title">Add Title</string>
+    <string name="checkable">Show Checkboxes</string>
 
     <!-- Days of the Week -->
     <string name="sunday">Sunday</string>

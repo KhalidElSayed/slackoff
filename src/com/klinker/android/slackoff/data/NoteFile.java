@@ -38,6 +38,7 @@ public class NoteFile {
 
     /**
      * public constructor creating information off of specified file
+     *
      * @param file the file to act on
      */
     public NoteFile(File file) {
@@ -51,6 +52,7 @@ public class NoteFile {
 
     /**
      * gets the file for use later if need be
+     *
      * @return the file
      */
     public File getFile() {
@@ -59,6 +61,7 @@ public class NoteFile {
 
     /**
      * whether or not this file is a directory
+     *
      * @return true if it is a directory, else false
      */
     public boolean isFolder() {
@@ -67,6 +70,7 @@ public class NoteFile {
 
     /**
      * gets the path to the file
+     *
      * @return the path on sd card
      */
     public String getPath() {
@@ -75,6 +79,7 @@ public class NoteFile {
 
     /**
      * the file name
+     *
      * @return the file's name
      */
     public String getName() {
@@ -83,6 +88,7 @@ public class NoteFile {
 
     /**
      * gets the date formatted for the file
+     *
      * @return the date as a string
      */
     public String getDate() {

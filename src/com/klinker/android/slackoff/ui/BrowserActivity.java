@@ -2,18 +2,16 @@ package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.view.Menu;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
@@ -21,16 +19,15 @@ import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.adapter.ClassesCursorAdapter;
 import com.klinker.android.slackoff.adapter.FileListAdapter;
 import com.klinker.android.slackoff.data.NoteFile;
-import com.klinker.android.slackoff.data.SchoolClass;
 import com.klinker.android.slackoff.listeners.AddClassListener;
-import com.klinker.android.slackoff.service.OverNoteService;
 import com.klinker.android.slackoff.sql.SchoolData;
-import com.klinker.android.slackoff.utils.IOUtils;
 import com.klinker.android.slackoff.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Main activity for app, which is a simple file browser
@@ -92,6 +89,7 @@ public class BrowserActivity extends Activity {
 
     /**
      * First step in an activity lifecycle which creates the views
+     *
      * @param savedInstanceState
      */
     @Override
@@ -290,6 +288,7 @@ public class BrowserActivity extends Activity {
 
     /**
      * Sets the drawer state
+     *
      * @param savedInstanceState
      */
     @Override
@@ -303,6 +302,7 @@ public class BrowserActivity extends Activity {
 
     /**
      * Called when the orientation changes
+     *
      * @param newConfig switches orientation
      */
     @Override
@@ -315,6 +315,7 @@ public class BrowserActivity extends Activity {
 
     /**
      * Handles all long clicks on a file or folder
+     *
      * @param noteFile is the file which we are acting on
      * @return true once dialog has been shown
      */
@@ -389,6 +390,7 @@ public class BrowserActivity extends Activity {
 
     /**
      * Acts when the option item has been selected
+     *
      * @param item the selected item
      * @return
      */
@@ -456,6 +458,7 @@ public class BrowserActivity extends Activity {
 
     /**
      * Attaches the options menu to the activity
+     *
      * @param menu the menu to attach
      * @return
      */

@@ -13,7 +13,8 @@
               android:fontFamily="serif"
               android:background="@null"
               android:gravity="center"
-              android:hint="@string/note_title"/>
+              android:hint="@string/note_title"
+              android:id="@+id/title"/>
 
     <View android:background="@color/app_color"
           android:layout_width="match_parent"
@@ -23,9 +24,13 @@
           android:layout_marginBottom="10dp"
           android:layout_marginTop="10dp"/>
 
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <com.klinker.android.slackoff.ui.NotesListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="0dp"
+            android:divider="@null"
+            android:footerDividersEnabled="false"
+            android:descendantFocusability="beforeDescendants"/>
 
 </LinearLayout>

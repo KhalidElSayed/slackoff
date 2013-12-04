@@ -1,15 +1,12 @@
 package com.klinker.android.slackoff.adapter;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.database.Cursor;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
-
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.sql.SchoolHelper;
 
@@ -61,8 +58,9 @@ public class ClassesCursorAdapter extends CursorAdapter {
 
     /**
      * Public constructor
+     *
      * @param context context of the app
-     * @param cursor cursor to go through
+     * @param cursor  cursor to go through
      */
     public ClassesCursorAdapter(Context context, Cursor cursor) {
         // calls the super class constructor
@@ -76,8 +74,8 @@ public class ClassesCursorAdapter extends CursorAdapter {
     /**
      * Called when you want to create the new view
      *
-     * @param context context of app
-     * @param cursor cursor to go through
+     * @param context   context of app
+     * @param cursor    cursor to go through
      * @param viewGroup
      * @return the view that holds the data along with its tags
      */
@@ -101,9 +99,10 @@ public class ClassesCursorAdapter extends CursorAdapter {
 
     /**
      * Called when the view is first getting prepared for the screen
-     * @param position position in the list view
+     *
+     * @param position    position in the list view
      * @param convertView recycled view if it is availible
-     * @param parent parent of the item
+     * @param parent      parent of the item
      * @return view to be shown
      */
     @Override
@@ -135,9 +134,9 @@ public class ClassesCursorAdapter extends CursorAdapter {
     /**
      * Called when you actually display the data to the screen as you scroll through the view
      *
-     * @param view view that holds the data
+     * @param view    view that holds the data
      * @param context context of app
-     * @param cursor cursor to go through
+     * @param cursor  cursor to go through
      */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {

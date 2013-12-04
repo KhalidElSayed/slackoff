@@ -3,17 +3,10 @@ package com.klinker.android.slackoff.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Environment;
-
-import com.klinker.android.slackoff.data.SchoolClass;
 import com.klinker.android.slackoff.sql.SchoolData;
 import com.klinker.android.slackoff.sql.SchoolHelper;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.Date;
 
 public class IOUtils {
@@ -21,8 +14,8 @@ public class IOUtils {
     /**
      * Function to write a note to a file
      *
-     * @param text The text to write to the file
-     * @param title the title of the note
+     * @param text      The text to write to the file
+     * @param title     the title of the note
      * @param className The data path to the folder that the note should be written to
      * @return whether the file was written successfully or not
      */
@@ -64,6 +57,34 @@ public class IOUtils {
     public static boolean writeFile(Context context, String text, String title) {
         String path = getCurrentClass(context);
         return writeFile(path, text, title);
+    }
+
+    /**
+     * Function to read the text in a file and return that text as a single string to act accordingly on
+     *
+     * @param file the file to read
+     * @return a string of the files contents
+     */
+    public static String readFile(File file) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            String text = "";
+
+            while ((line = reader.readLine()) != null) {
+                text += line + "\n";
+            }
+
+            reader.close();
+
+            return text;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     /**

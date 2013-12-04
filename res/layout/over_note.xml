@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/rect_border">
+              android:orientation="vertical" android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/rect_border">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="15dp">
-
-       <Button
-           android:layout_width="0dp"
-           android:layout_height="wrap_content"
-           android:layout_weight="1"
-           android:background="@drawable/pressed_button_over_note"
-           android:text="@string/discard"
-           android:id="@+id/discard"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="15dp">
 
         <Button
-            android:layout_width="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/pressed_button_over_note"
+                android:text="@string/discard"
+                android:id="@+id/discard"/>
+
+        <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/pressed_button_over_note"
+                android:text="@string/save"
+                android:id="@+id/save"/>
+    </LinearLayout>
+
+    <EditText
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/note_name_hint"
+            android:id="@+id/name"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:inputType="textAutoComplete|textAutoCorrect|textCapWords"/>
+
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/pressed_button_over_note"
-            android:text="@string/save"
-            android:id="@+id/save"/>
-        </LinearLayout>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/note_name_hint"
-        android:id="@+id/name"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:inputType="textAutoComplete|textAutoCorrect|textCapWords"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:hint="@string/note_text_hint"
-        android:gravity="bottom"
-        android:id="@+id/content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:inputType="textAutoComplete|textAutoCorrect|textCapSentences"/>
+            android:hint="@string/note_text_hint"
+            android:gravity="bottom"
+            android:id="@+id/content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:inputType="textAutoComplete|textAutoCorrect|textCapSentences"/>
 
 </LinearLayout>

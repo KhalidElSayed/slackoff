@@ -3,16 +3,19 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="AppTheme" parent="android:Theme.Holo.Light">
+    <style name="AppTheme" parent="android:Theme.Holo.Light">
 
-    <item name="android:windowBackground">@color/window_background</item>
-    <item name="android:editTextStyle">@style/EditTextAppTheme</item>
-    <item name="android:buttonStyle">@style/ButtonAppTheme</item>
-    <item name="android:imageButtonStyle">@style/ImageButtonAppTheme</item>
-    <item name="android:listViewStyle">@style/ListViewAppTheme</item>
-    <item name="android:listViewWhiteStyle">@style/ListViewAppTheme.White</item>
-    <item name="android:spinnerItemStyle">@style/SpinnerItemAppTheme</item>
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:editTextStyle">@style/EditTextAppTheme</item>
+        <item name="android:buttonStyle">@style/ButtonAppTheme</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonAppTheme</item>
+        <item name="android:listViewStyle">@style/ListViewAppTheme</item>
+        <item name="android:listViewWhiteStyle">@style/ListViewAppTheme.White</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItemAppTheme</item>
+        <item name="android:textSelectHandleLeft">@drawable/ic_cursor</item>
+        <item name="android:textSelectHandleRight">@drawable/ic_cursor</item>
+        <item name="android:textSelectHandle">@drawable/ic_cursor</item>
 
-  </style>
+    </style>
 
 </resources>
