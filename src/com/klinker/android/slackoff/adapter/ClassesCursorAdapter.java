@@ -92,7 +92,7 @@ public class ClassesCursorAdapter extends CursorAdapter {
         holder.name = (TextView) v.findViewById(R.id.name);
         holder.start = (TextView) v.findViewById(R.id.start);
         holder.end = (TextView) v.findViewById(R.id.end);
-        holder.days = (TextView) v.findViewById(R.id.days);
+        //holder.days = (TextView) v.findViewById(R.id.days);
 
         v.setTag(holder);
 
@@ -152,7 +152,6 @@ public class ClassesCursorAdapter extends CursorAdapter {
 
         // sets the info to the view
         holder.name.setText(mName);
-        holder.days.setText(mDays);
 
         // Formatting the start date
         Date startDate = new Date(mStart);

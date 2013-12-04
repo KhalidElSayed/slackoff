@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginLeft="10dp">
+        android:layout_marginLeft="0dp">
 
         <TextView
             android:layout_width="0dp"
@@ -33,10 +33,59 @@
 
         </LinearLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/days"/>
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/sunday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Sun"
+            android:textColor="@color/light_text" />
+        <TextView
+            android:id="@+id/monday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mon"
+            android:textColor="@color/light_text" />
+        <TextView
+            android:id="@+id/tuesday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tue"
+            android:textColor="@color/light_text" />
+        <TextView
+            android:id="@+id/wednesday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Wed"
+            android:textColor="@color/light_text" />
+        <TextView
+            android:id="@+id/thursday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Thu"
+            android:textColor="@color/light_text" />
+        <TextView
+            android:id="@+id/friday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Fri"
+            android:textColor="@color/light_text" />
+        <TextView
+            android:id="@+id/saturday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Sat"
+            android:textColor="@color/light_text" />
+        </LinearLayout>
 
 </LinearLayout>

@@ -14,4 +14,7 @@
     <color name="subtitle_text_color">#aaaaaa</color>
     <color name="light_drawer">#ffffff</color>
 
+    <color name="light_text">#20000000</color>
+    <color name="dark_text">#000</color>
+
 </resources>
