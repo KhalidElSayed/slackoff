@@ -53,7 +53,13 @@ public class ClassesCursorAdapter extends CursorAdapter {
         /**
          * holds the days of the week
          */
-        public TextView days;
+        public TextView sunday;
+        public TextView monday;
+        public TextView tuesday;
+        public TextView wednesday;
+        public TextView thursday;
+        public TextView friday;
+        public TextView saturday;
     }
 
     /**
@@ -90,7 +96,13 @@ public class ClassesCursorAdapter extends CursorAdapter {
         holder.name = (TextView) v.findViewById(R.id.name);
         holder.start = (TextView) v.findViewById(R.id.start);
         holder.end = (TextView) v.findViewById(R.id.end);
-        holder.days = (TextView) v.findViewById(R.id.days);
+        holder.sunday = (TextView) v.findViewById(R.id.sunday);
+        holder.monday = (TextView) v.findViewById(R.id.monday);
+        holder.tuesday = (TextView) v.findViewById(R.id.tuesday);
+        holder.wednesday = (TextView) v.findViewById(R.id.wednesday);
+        holder.thursday = (TextView) v.findViewById(R.id.thursday);
+        holder.friday = (TextView) v.findViewById(R.id.friday);
+        holder.saturday = (TextView) v.findViewById(R.id.saturday);
 
         v.setTag(holder);
 
@@ -151,22 +163,48 @@ public class ClassesCursorAdapter extends CursorAdapter {
 
         // sets the info to the view
         holder.name.setText(mName);
-        holder.days.setText(mDays);
 
         // Formatting the start date
         Date startDate = new Date(mStart);
         int mHours = startDate.getHours();
         int mMins = startDate.getMinutes();
-        String hours = mHours < 13 ? mHours + "" : mHours - 12 + "";
+        String ampm = mHours >= 12 ? " PM" : " AM";
+        String hours = mHours < 13 ? mHours + "" :  mHours - 12 + "";
         String mins = mMins < 10 ? "0" + mMins : mMins + "";
-        holder.start.setText(hours + ":" + mins);
+        holder.start.setText(hours + ":" + mins + ampm);
 
         // Formatting the end date
         Date endDate = new Date(mEnd);
         mHours = endDate.getHours();
         mMins = endDate.getMinutes();
-        hours = mHours < 13 ? mHours + "" : mHours - 12 + "";
+        ampm = mHours >= 12 ? " PM" : " AM";
+        hours = mHours < 13 ? mHours + "" :  mHours - 12 + "";
         mins = mMins < 10 ? "0" + mMins : mMins + "";
-        holder.end.setText(hours + ":" + mins);
+        holder.end.setText(hours + ":" + mins + ampm);
+
+        // setting up the days of the week
+        if (mDays.contains("S ")) {
+            holder.sunday.setTextColor(context.getResources().getColor(R.color.dark_text));
+        }
+        if (mDays.contains("M ")) {
+            holder.monday.setTextColor(context.getResources().getColor(R.color.dark_text));
+        }
+        if (mDays.contains("T ")) {
+            holder.tuesday.setTextColor(context.getResources().getColor(R.color.dark_text));
+        }
+        if (mDays.contains("W ")) {
+            holder.wednesday.setTextColor(context.getResources().getColor(R.color.dark_text));
+        }
+        if (mDays.contains("Th ")) {
+            holder.thursday.setTextColor(context.getResources().getColor(R.color.dark_text));
+        }
+        if (mDays.contains("F ")) {
+            holder.friday.setTextColor(context.getResources().getColor(R.color.dark_text));
+        }
+        if (mDays.contains("Sa ")) {
+            holder.sunday.setTextColor(context.getResources().getColor(R.color.dark_text));
+        }
+
+
     }
 }
