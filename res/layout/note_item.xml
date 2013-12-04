@@ -15,8 +15,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:orientation="vertical">
 
         <EditText
                 android:layout_width="fill_parent"
@@ -25,16 +24,17 @@
                 android:ems="10"
                 android:id="@+id/note"
                 android:background="@null"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
+                android:padding="10dp"
                 android:textSize="16sp"
-                android:fontFamily="serif"/>
+                android:fontFamily="serif"
+                android:hint="@string/type_here"/>
 
         <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:padding="5dp"/>
     </LinearLayout>
 
     <ImageButton

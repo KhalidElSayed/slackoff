@@ -119,22 +119,19 @@ public class NoteActivity extends Activity {
         adapter = new NoteItemAdapter(this, notes, checkable);
         list.setAdapter(adapter);
         list.setItemsCanFocus(true);
-        View footerView = getLayoutInflater().inflate(R.layout.note_footer, null, false);
-        View addButton = footerView.findViewById(R.id.new_line);
-        View attachButton = footerView.findViewById(R.id.attach);
-        list.addFooterView(footerView);
 
-        addButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.new_line).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                adapter.addLine();
+                list.smoothScrollToPosition(adapter.getCount());
             }
         });
 
-        attachButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.attach).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // TODO create image chooser to insert here
             }
         });
     }
@@ -165,7 +162,6 @@ public class NoteActivity extends Activity {
                 item.setChecked(!item.isChecked());
                 checkable = item.isChecked();
                 adapter.setCheckBoxes(checkable);
-                adapter.notifyDataSetChanged();
                 return true;
         }
 

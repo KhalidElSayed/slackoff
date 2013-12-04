@@ -2,6 +2,8 @@ package com.klinker.android.slackoff.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +37,11 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
     private boolean checkBoxes;
 
     /**
+     * variable holding what item should have focus when the list is refreshed
+     */
+    private int focusOn = 0;
+
+    /**
      * creates adapter
      *
      * @param context    the activities context
@@ -48,8 +55,13 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
         this.checkBoxes = checkBoxes;
     }
 
+    /**
+     * sets whether or not to show the checkboxes on the note
+     * @param checkBoxes
+     */
     public void setCheckBoxes(boolean checkBoxes) {
         this.checkBoxes = checkBoxes;
+        notifyDataSetChanged();
     }
 
     /**
@@ -71,7 +83,7 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
      * @return the final view to be shown
      */
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         // use the recycled view
         View rowView = convertView;
 
@@ -80,11 +92,24 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             rowView = inflater.inflate(R.layout.note_item, null);
 
-            ViewHolder viewHolder = new ViewHolder();
+            final ViewHolder viewHolder = new ViewHolder();
             viewHolder.checkBox = (CheckBox) rowView.findViewById(R.id.checkBox);
             viewHolder.note = (EditText) rowView.findViewById(R.id.note);
             viewHolder.image = (ImageView) rowView.findViewById(R.id.imageView);
             viewHolder.discard = (ImageButton) rowView.findViewById(R.id.deleteButton);
+
+            viewHolder.note.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    notes.set(viewHolder.note.getId(), editable.toString());
+                }
+            });
 
             // sets the tag so we can find the view later
             rowView.setTag(viewHolder);
@@ -94,6 +119,7 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
 
         // finds specified view holder and sets the text and information correctly
         final ViewHolder holder = (ViewHolder) rowView.getTag();
+        holder.note.setId(position);
 
         if (checkBoxes) {
             // set whether or not the check box should be shown checked
@@ -107,8 +133,10 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
             holder.checkBox.setVisibility(View.GONE);
         }
 
+        // remove the check box markers from the start of the note
         note = note.replace("_[1]_", "").replace("_[0]_", "");
 
+        // act on image or text
         if (note.startsWith("<img>")) {
             holder.checkBox.setVisibility(View.GONE);
             holder.note.setVisibility(View.GONE);
@@ -120,12 +148,7 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
             holder.image.setVisibility(View.GONE);
         }
 
-        if (holder.note.hasFocus()) {
-            holder.discard.setVisibility(View.VISIBLE);
-        } else {
-            holder.discard.setVisibility(View.GONE);
-        }
-
+        // show and hide the discard button as focus changes
         holder.note.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -156,15 +179,57 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
             }
         });
 
+        // remove the line when the discard button is clicked
         holder.discard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int position = holder.note.getId();
+
+                if (position == getCount() - 1) {
+                    focusOn = position - 1;
+                } else {
+                    focusOn = position;
+                }
+
                 notes.remove(position);
+
+                if (getCount() == 0) {
+                    notes.add("");
+                    focusOn = 0;
+                }
+
                 notifyDataSetChanged();
             }
         });
 
+        // adjust what view should be focused on
+        if (focusOn > getCount()) {
+            focusOn = getCount() - 1;
+        }
+
+        // set that focus when appropriate
+        if (focusOn == position) {
+            holder.note.requestFocusFromTouch();
+            holder.note.setSelection(note.length());
+        }
+
+        // show the discard button when necessary
+        if (holder.note.hasFocus()) {
+            holder.discard.setVisibility(View.VISIBLE);
+        } else {
+            holder.discard.setVisibility(View.GONE);
+        }
+
         return rowView;
+    }
+
+    /**
+     * adds a new note line to the bottom of the adapter
+     */
+    public void addLine() {
+        focusOn = getCount();
+        notes.add("");
+        notifyDataSetChanged();
     }
 
     /**

@@ -38,6 +38,7 @@
     <string name="checkable">Show Checkboxes</string>
     <string name="new_line">New Line</string>
     <string name="attach_picture">Attach Picture</string>
+    <string name="type_here">Type Here…</string>
 
     <!-- Days of the Week -->
     <string name="sunday">Sunday</string>
