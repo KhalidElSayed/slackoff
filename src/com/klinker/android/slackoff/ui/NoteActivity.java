@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.klinker.android.slackoff.R;
@@ -112,12 +113,30 @@ public class NoteActivity extends Activity {
             notes.add("_[0]_test 2 note");
         }
 
+        // set up the listview stuff
         // add the footer view to the bottom of the list so that there is always a way to add another bullet point
         list = (ListView) findViewById(R.id.listView);
         adapter = new NoteItemAdapter(this, notes, checkable);
         list.setAdapter(adapter);
         list.setItemsCanFocus(true);
-        list.addFooterView(getLayoutInflater().inflate(R.layout.note_item, null, false));
+        View footerView = getLayoutInflater().inflate(R.layout.note_footer, null, false);
+        View addButton = footerView.findViewById(R.id.new_line);
+        View attachButton = footerView.findViewById(R.id.attach);
+        list.addFooterView(footerView);
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        attachButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     /**
