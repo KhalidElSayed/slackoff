@@ -7,9 +7,10 @@
     android:layout_width="match_parent"
     android:layout_marginLeft="6dp"
     android:layout_marginRight="8dp"
-    android:divider="@null"
-    android:dividerHeight="5dp"
+    android:divider="@drawable/apptheme_btn_default_normal_holo_light"
+    android:dividerHeight="1dp"
     android:scrollbars="vertical"
     android:background="@color/light_drawer"
     android:listSelector="@android:color/transparent"
+    android:footerDividersEnabled="false"
     />
