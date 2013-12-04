@@ -2,9 +2,11 @@ package com.klinker.android.slackoff.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,8 +19,11 @@ import com.klinker.android.slackoff.utils.IOUtils;
 import com.klinker.android.slackoff.utils.Utils;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 /**
  * Activity to handle all notes that are opened in the app (have an extension of .klink and this activity is registered
@@ -27,6 +32,11 @@ import java.util.Arrays;
  * @author Jake and Luke Klinker
  */
 public class NoteActivity extends Activity {
+
+    /**
+     * request code for picking an image to attach to the note
+     */
+    private static final int GET_IMAGE = 1209;
 
     /**
      * Constant to read at the start of the note to check checkable
@@ -116,7 +126,7 @@ public class NoteActivity extends Activity {
         // set up the listview stuff
         // add the footer view to the bottom of the list so that there is always a way to add another bullet point
         list = (ListView) findViewById(R.id.listView);
-        adapter = new NoteItemAdapter(this, notes, checkable);
+        adapter = new NoteItemAdapter(this, notes, checkable, pathToNote);
         list.setAdapter(adapter);
         list.setItemsCanFocus(true);
 
@@ -131,7 +141,9 @@ public class NoteActivity extends Activity {
         findViewById(R.id.attach).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO create image chooser to insert here
+                Intent photoPicker = new Intent(Intent.ACTION_PICK);
+                photoPicker.setType("image/*");
+                startActivityForResult(photoPicker, GET_IMAGE);
             }
         });
     }
@@ -215,5 +227,32 @@ public class NoteActivity extends Activity {
     public void onBackPressed() {
         saveNote();
         super.onBackPressed();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case GET_IMAGE:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        // get the bitmap that was returned
+                        Bitmap image = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+
+                        // save that bitmap to our sd card in the current location
+                        // with the file name of the current time in millis
+                        String fileName = Calendar.getInstance().getTimeInMillis() + ".jpg";
+                        FileOutputStream fos = new FileOutputStream(new File(pathToNote).getParent() + "/" + fileName);
+                        image.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+
+                        // add a new line to our note adapter and refresh
+                        adapter.addImage(fileName);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        // :(
+                    }
+                }
+
+                break;
+        }
     }
 }

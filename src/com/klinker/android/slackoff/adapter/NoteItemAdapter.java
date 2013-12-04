@@ -2,6 +2,7 @@ package com.klinker.android.slackoff.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.klinker.android.slackoff.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -37,6 +39,11 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
     private ArrayList<String> notes;
 
     /**
+     * holds the path to the file that we are reading
+     */
+    private String currentPath;
+
+    /**
      * The activity context
      */
     private Context context;
@@ -57,12 +64,14 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
      * @param context    the activities context
      * @param notes      the notes to be displayed
      * @param checkBoxes whether or not check boxes should be displayed on the notes
+     * @param currentPath the path to the file we are reading
      */
-    public NoteItemAdapter(Context context, ArrayList<String> notes, boolean checkBoxes) {
+    public NoteItemAdapter(Context context, ArrayList<String> notes, boolean checkBoxes, String currentPath) {
         super(context, R.layout.note_item);
         this.context = context;
         this.notes = notes;
         this.checkBoxes = checkBoxes;
+        this.currentPath = currentPath;
     }
 
     /**
@@ -160,7 +169,9 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
             holder.checkBox.setVisibility(View.GONE);
             holder.note.setVisibility(View.GONE);
             holder.image.setVisibility(View.VISIBLE);
-            // TODO parse the image tag and display the bitmap in the holder.image
+            note = note.replace("<img>", "").replace("</img>", "");
+
+            holder.image.setImageURI(Uri.fromFile(new File(new File(currentPath).getParent() + "/" + note)));
         } else {
             holder.note.setVisibility(View.VISIBLE);
             holder.note.setText(note);
@@ -244,11 +255,27 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
 
     /**
      * adds a new note line to the bottom of the adapter
+     * @param text the text to be written
+     */
+    public void addLine(String text) {
+        focusOn = getCount();
+        notes.add(text);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * adds a new note line to the bottom of the adapter
      */
     public void addLine() {
-        focusOn = getCount();
-        notes.add("");
-        notifyDataSetChanged();
+        addLine("");
+    }
+
+    /**
+     * adds a new image to the note at the bottom
+     * @param fileName the name of the image to display
+     */
+    public void addImage(String fileName) {
+        addLine("<img>" + fileName + "</img>");
     }
 
     /**
