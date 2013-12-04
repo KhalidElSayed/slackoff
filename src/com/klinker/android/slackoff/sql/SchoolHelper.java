@@ -29,6 +29,7 @@ public class SchoolHelper extends SQLiteOpenHelper {
 
     /**
      * creates database to hold school data
+     *
      * @param context the activity you are currently in
      */
     public SchoolHelper(Context context) {
@@ -37,6 +38,7 @@ public class SchoolHelper extends SQLiteOpenHelper {
 
     /**
      * Creates the database
+     *
      * @param database database to work with
      */
     @Override
@@ -46,7 +48,8 @@ public class SchoolHelper extends SQLiteOpenHelper {
 
     /**
      * called when database is updated
-     * @param db the database to work with
+     *
+     * @param db         the database to work with
      * @param oldVersion the older version code
      * @param newVersion the new version code
      */

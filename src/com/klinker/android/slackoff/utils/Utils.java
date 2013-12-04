@@ -20,6 +20,7 @@ public class Utils {
 
     /**
      * Gets the mime type of the specified file so that it can be opened in correct app
+     *
      * @param url the path to the file
      * @return the mimetype of specified file
      */
@@ -40,6 +41,7 @@ public class Utils {
 
     /**
      * Converts pixels to density independent pixels
+     *
      * @param px the number of pixels
      * @return the value of the density independent pixels
      */
@@ -49,6 +51,7 @@ public class Utils {
 
     /**
      * Recursive method to delete all underlying files before deleting the current file to be sure that it is gone
+     *
      * @param file the file to be deleted
      */
     public static void deleteDirectory(File file) {

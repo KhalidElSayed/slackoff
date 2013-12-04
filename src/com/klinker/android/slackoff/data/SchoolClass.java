@@ -30,10 +30,10 @@ public class SchoolClass {
     /**
      * Public constructor
      *
-     * @param name the name
+     * @param name  the name
      * @param start the start time
-     * @param end the end time
-     * @param days days of the week
+     * @param end   the end time
+     * @param days  days of the week
      */
     public SchoolClass(String name, long start, long end, String days) {
         this.name = name;
@@ -44,6 +44,7 @@ public class SchoolClass {
 
     /**
      * getter method for name
+     *
      * @return name of the class
      */
     public String getName() {
@@ -52,6 +53,7 @@ public class SchoolClass {
 
     /**
      * getter method for start time
+     *
      * @return long with the start time
      */
     public long getStart() {
@@ -60,6 +62,7 @@ public class SchoolClass {
 
     /**
      * getter method for end time
+     *
      * @return long with the end time
      */
     public long getEnd() {
@@ -68,6 +71,7 @@ public class SchoolClass {
 
     /**
      * getter method for the days
+     *
      * @return String with the days of the week
      */
     public String getDays() {

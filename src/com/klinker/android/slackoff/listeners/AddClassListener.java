@@ -3,13 +3,7 @@ package com.klinker.android.slackoff.listeners;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TimePicker;
-
+import android.widget.*;
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.adapter.ClassesCursorAdapter;
 import com.klinker.android.slackoff.data.SchoolClass;
@@ -37,8 +31,9 @@ public class AddClassListener implements View.OnClickListener {
 
     /**
      * Constructor for the listener
+     *
      * @param context the context of the app
-     * @param list The list view
+     * @param list    The list view
      */
     public AddClassListener(Context context, ListView list) {
         this.context = context;
@@ -47,6 +42,7 @@ public class AddClassListener implements View.OnClickListener {
 
     /**
      * On click method that we need to override for the implementation
+     *
      * @param view View that was clicked
      */
     @Override
@@ -98,7 +94,7 @@ public class AddClassListener implements View.OnClickListener {
                             boolean friday = ((CheckBox) repeat.findViewById(R.id.friday)).isChecked();
                             boolean saturday = ((CheckBox) repeat.findViewById(R.id.saturday)).isChecked();
 
-                            final String days = (sunday ?  "S " : "") +
+                            final String days = (sunday ? "S " : "") +
                                     (monday ? "M " : "") +
                                     (tuesday ? "T " : "") +
                                     (wednesday ? "W " : "") +
@@ -139,10 +135,10 @@ public class AddClassListener implements View.OnClickListener {
                                             int endHour = ((TimePicker) end.findViewById(R.id.timePicker)).getCurrentHour();
                                             int endMinute = ((TimePicker) end.findViewById(R.id.timePicker)).getCurrentMinute();
 
-                                            Date setDate = new Date(year,month,day,startHour,startMinute);
+                                            Date setDate = new Date(year, month, day, startHour, startMinute);
                                             final long setTime = setDate.getTime();
 
-                                            setDate = new Date(year,month,day,endHour,endMinute);
+                                            setDate = new Date(year, month, day, endHour, endMinute);
                                             final long endTime = setDate.getTime();
 
                                             // store the class to the database

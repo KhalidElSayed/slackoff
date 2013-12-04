@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.klinker.android.slackoff.data.SchoolClass;
 
 /**
@@ -18,8 +17,8 @@ public class SchoolData {
     // Database fields
     private SQLiteDatabase database;
     private SchoolHelper dbHelper;
-    public String[] allColumns = { SchoolHelper.COLUMN_ID, SchoolHelper.COLUMN_NAME,
-            SchoolHelper.COLUMN_START_TIME, SchoolHelper.COLUMN_END_TIME, SchoolHelper.COLUMN_DAYS };
+    public String[] allColumns = {SchoolHelper.COLUMN_ID, SchoolHelper.COLUMN_NAME,
+            SchoolHelper.COLUMN_START_TIME, SchoolHelper.COLUMN_END_TIME, SchoolHelper.COLUMN_DAYS};
 
     public SchoolData(Context context) {
         dbHelper = new SchoolHelper(context);

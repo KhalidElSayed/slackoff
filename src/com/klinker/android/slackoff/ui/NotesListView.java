@@ -11,6 +11,7 @@ public class NotesListView extends ListView {
 
     /**
      * Default constructor
+     *
      * @param context
      */
     public NotesListView(Context context) {
@@ -19,6 +20,7 @@ public class NotesListView extends ListView {
 
     /**
      * Default constructor
+     *
      * @param context
      * @param attributeSet
      */
@@ -28,6 +30,7 @@ public class NotesListView extends ListView {
 
     /**
      * Overrides to prevent the focus on our text views from switching when the keyboard is shown
+     *
      * @param w
      * @param h
      * @param olw

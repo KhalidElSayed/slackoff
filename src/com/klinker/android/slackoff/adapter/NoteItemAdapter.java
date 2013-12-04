@@ -2,8 +2,6 @@ package com.klinker.android.slackoff.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +9,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.klinker.android.slackoff.R;
-import com.klinker.android.slackoff.data.NoteFile;
-import com.klinker.android.slackoff.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -40,8 +36,9 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
 
     /**
      * creates adapter
-     * @param context the activities context
-     * @param notes the notes to be displayed
+     *
+     * @param context    the activities context
+     * @param notes      the notes to be displayed
      * @param checkBoxes whether or not check boxes should be displayed on the notes
      */
     public NoteItemAdapter(Context context, ArrayList<String> notes, boolean checkBoxes) {
@@ -57,6 +54,7 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
 
     /**
      * Sets the number of items in the adapter
+     *
      * @return the size of the adapter
      */
     @Override
@@ -66,9 +64,10 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
 
     /**
      * Gets the view to be shown in the list (uses view recycling for efficiency)
-     * @param position the position of the item in the list
+     *
+     * @param position    the position of the item in the list
      * @param convertView the recycled view
-     * @param parent the parent of the recycled view
+     * @param parent      the parent of the recycled view
      * @return the final view to be shown
      */
     @Override
@@ -140,7 +139,8 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
                     anim.setDuration(200);
                     anim.setAnimationListener(new Animation.AnimationListener() {
                         @Override
-                        public void onAnimationStart(Animation animation) { }
+                        public void onAnimationStart(Animation animation) {
+                        }
 
                         @Override
                         public void onAnimationEnd(Animation animation) {
@@ -148,7 +148,8 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
                         }
 
                         @Override
-                        public void onAnimationRepeat(Animation animation) { }
+                        public void onAnimationRepeat(Animation animation) {
+                        }
                     });
                     holder.discard.startAnimation(anim);
                 }

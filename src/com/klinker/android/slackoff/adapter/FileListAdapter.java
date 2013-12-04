@@ -37,8 +37,9 @@ public class FileListAdapter extends ArrayAdapter<NoteFile> {
 
     /**
      * creates adapter
+     *
      * @param context the activities context
-     * @param files the files to be displayed
+     * @param files   the files to be displayed
      * @param folders whether this is a folder system or file system
      */
     public FileListAdapter(Context context, ArrayList<NoteFile> files, boolean folders) {
@@ -50,6 +51,7 @@ public class FileListAdapter extends ArrayAdapter<NoteFile> {
 
     /**
      * Sets the number of items in the adapter
+     *
      * @return the size of the adapter
      */
     @Override
@@ -59,9 +61,10 @@ public class FileListAdapter extends ArrayAdapter<NoteFile> {
 
     /**
      * Gets the view to be shown in the list (uses view recycling for efficiency)
-     * @param position the position of the item in the list
+     *
+     * @param position    the position of the item in the list
      * @param convertView the recycled view
-     * @param parent the parent of the recycled view
+     * @param parent      the parent of the recycled view
      * @return the final view to be shown
      */
     @Override

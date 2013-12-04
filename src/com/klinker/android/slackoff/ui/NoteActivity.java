@@ -5,7 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.*;
+import android.widget.EditText;
+import android.widget.ListView;
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.adapter.NoteItemAdapter;
 import com.klinker.android.slackoff.utils.IOUtils;
@@ -128,6 +129,7 @@ public class NoteActivity extends Activity {
 
     /**
      * Acts when the option item has been selected
+     *
      * @param item the selected item
      * @return
      */
@@ -153,6 +155,7 @@ public class NoteActivity extends Activity {
 
     /**
      * Attaches the options menu to the activity
+     *
      * @param menu the menu to attach
      * @return
      */

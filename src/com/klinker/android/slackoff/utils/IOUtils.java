@@ -3,7 +3,6 @@ package com.klinker.android.slackoff.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Environment;
-
 import com.klinker.android.slackoff.sql.SchoolData;
 import com.klinker.android.slackoff.sql.SchoolHelper;
 
@@ -15,8 +14,8 @@ public class IOUtils {
     /**
      * Function to write a note to a file
      *
-     * @param text The text to write to the file
-     * @param title the title of the note
+     * @param text      The text to write to the file
+     * @param title     the title of the note
      * @param className The data path to the folder that the note should be written to
      * @return whether the file was written successfully or not
      */
