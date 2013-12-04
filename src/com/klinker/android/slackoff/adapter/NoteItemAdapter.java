@@ -7,6 +7,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.data.NoteFile;
@@ -83,6 +85,7 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
             viewHolder.checkBox = (CheckBox) rowView.findViewById(R.id.checkBox);
             viewHolder.note = (EditText) rowView.findViewById(R.id.note);
             viewHolder.image = (ImageView) rowView.findViewById(R.id.imageView);
+            viewHolder.discard = (ImageButton) rowView.findViewById(R.id.deleteButton);
 
             // sets the tag so we can find the view later
             rowView.setTag(viewHolder);
@@ -91,7 +94,7 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
         String note = notes.get(position);
 
         // finds specified view holder and sets the text and information correctly
-        ViewHolder holder = (ViewHolder) rowView.getTag();
+        final ViewHolder holder = (ViewHolder) rowView.getTag();
 
         if (checkBoxes) {
             // set whether or not the check box should be shown checked
@@ -118,6 +121,42 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
             holder.image.setVisibility(View.GONE);
         }
 
+        holder.note.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    holder.discard.setVisibility(View.VISIBLE);
+                    Animation anim = AnimationUtils.loadAnimation(context, R.anim.slide_in_from_right);
+                    anim.setDuration(200);
+                    holder.discard.startAnimation(anim);
+                } else {
+                    Animation anim = AnimationUtils.loadAnimation(context, R.anim.slide_out_to_right);
+                    anim.setDuration(200);
+                    anim.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) { }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            holder.discard.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) { }
+                    });
+                    holder.discard.startAnimation(anim);
+                }
+            }
+        });
+
+        holder.discard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                notes.remove(position);
+                notifyDataSetChanged();
+            }
+        });
+
         return rowView;
     }
 
@@ -129,5 +168,6 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
         public CheckBox checkBox;
         public EditText note;
         public ImageView image;
+        public ImageButton discard;
     }
 }

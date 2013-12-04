@@ -40,9 +40,10 @@
     <ImageButton
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:src="@drawable/ic_discard"
-        android:background="@drawable/pressed_button_over_note"/>
+        android:background="@drawable/pressed_button_over_note"
+        android:visibility="gone"/>
 
 </LinearLayout>

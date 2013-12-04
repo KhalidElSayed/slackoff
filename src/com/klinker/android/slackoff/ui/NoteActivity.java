@@ -99,6 +99,16 @@ public class NoteActivity extends Activity {
             notes = new ArrayList<String>();
             notes.add("_[1]_test1");
             notes.add("_[0]_test 2 note");
+            notes.add("_[0]_test 2 note");
+            notes.add("_[0]_test 2 note");
+            notes.add("_[0]_test 2 note");
+            notes.add("_[0]_test 2 note");
+            notes.add("_[0]_test 2 note");
+            notes.add("_[0]_test 2 note");
+            notes.add("_[0]_test 2 note");
+            notes.add("_[0]_test 2 note");
+            notes.add("_[0]_test 2 note");
+            notes.add("_[0]_test 2 note");
         }
 
         // add the footer view to the bottom of the list so that there is always a way to add another bullet point

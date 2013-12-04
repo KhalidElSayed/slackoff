@@ -12,6 +12,9 @@
     <item name="android:listViewStyle">@style/ListViewAppTheme</item>
     <item name="android:listViewWhiteStyle">@style/ListViewAppTheme.White</item>
     <item name="android:spinnerItemStyle">@style/SpinnerItemAppTheme</item>
+    <item name="android:textSelectHandleLeft">@drawable/ic_cursor</item>
+    <item name="android:textSelectHandleRight">@drawable/ic_cursor</item>
+    <item name="android:textSelectHandle">@drawable/ic_cursor</item>
 
   </style>
 
