@@ -88,9 +88,9 @@ public class NoteActivity extends Activity {
 
         if (!note.equals("")) {
             // this is a previously created note
-            if (note.startsWith(CHECKABLE)) {
+            if (note.contains(CHECKABLE)) {
                 checkable = true;
-                note.replace(CHECKABLE, "");
+                note = note.replace(CHECKABLE, "");
             } else {
                 checkable = false;
             }
