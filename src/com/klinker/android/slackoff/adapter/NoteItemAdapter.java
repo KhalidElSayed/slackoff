@@ -2,7 +2,11 @@ package com.klinker.android.slackoff.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -12,8 +16,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.klinker.android.slackoff.R;
+import com.klinker.android.slackoff.utils.Utils;
 
 import java.io.File;
+import java.io.IOError;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -166,16 +173,66 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
 
         // act on image or text
         if (note.startsWith("<img>")) {
-            holder.checkBox.setVisibility(View.GONE);
-            holder.note.setVisibility(View.GONE);
             holder.image.setVisibility(View.VISIBLE);
+            holder.note.setVisibility(View.GONE);
+            holder.discard.setVisibility(View.VISIBLE);
             note = note.replace("<img>", "").replace("</img>", "");
 
-            holder.image.setImageURI(Uri.fromFile(new File(new File(currentPath).getParent() + "/" + note)));
+            // load the image on a new thread as this can take some time to accomplish and we want to avoid lag
+            final String fileName = note;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        final Uri uri = Uri.fromFile(new File(new File(currentPath).getParent() + "/" + fileName));
+                        final Bitmap image = Utils.getThumbnail(context, uri);
+
+                        ((Activity) context).findViewById(android.R.id.content).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.image.setImageBitmap(image);
+
+                                // if the image is clicked on, we want to open this in the gallery
+                                holder.image.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Intent intent = new Intent();
+                                        intent.setAction(Intent.ACTION_VIEW);
+                                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                        intent.putExtra("SingleItemOnly", true);
+                                        intent.setDataAndType(uri, "image/*");
+                                        context.startActivity(intent);
+                                    }
+                                });
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         } else {
-            holder.note.setVisibility(View.VISIBLE);
             holder.note.setText(note);
+            holder.note.setVisibility(View.VISIBLE);
             holder.image.setVisibility(View.GONE);
+
+            // adjust what view should be focused on
+            if (focusOn > getCount()) {
+                focusOn = getCount() - 1;
+            }
+
+            // set that focus when appropriate
+            if (focusOn == position) {
+                holder.note.requestFocusFromTouch();
+                holder.note.setSelection(note.length());
+            }
+
+            // show the discard button when necessary
+            if (holder.note.hasFocus()) {
+                holder.discard.setVisibility(View.VISIBLE);
+            } else {
+                holder.discard.setVisibility(View.GONE);
+            }
         }
 
         // show and hide the discard button as focus changes
@@ -231,24 +288,6 @@ public class NoteItemAdapter extends ArrayAdapter<String> {
                 notifyDataSetChanged();
             }
         });
-
-        // adjust what view should be focused on
-        if (focusOn > getCount()) {
-            focusOn = getCount() - 1;
-        }
-
-        // set that focus when appropriate
-        if (focusOn == position) {
-            holder.note.requestFocusFromTouch();
-            holder.note.setSelection(note.length());
-        }
-
-        // show the discard button when necessary
-        if (holder.note.hasFocus()) {
-            holder.discard.setVisibility(View.VISIBLE);
-        } else {
-            holder.discard.setVisibility(View.GONE);
-        }
 
         return rowView;
     }
