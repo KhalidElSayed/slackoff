@@ -286,10 +286,6 @@ public class BrowserActivity extends Activity {
         drawerList.setAdapter(new ClassesCursorAdapter(this, data.getCursor()));
 
         footer.setOnClickListener(new AddClassListener(this, drawerList));
-
-        // starts  the service
-        // TODO: check if they have a class going on before starting it
-        // startService(new Intent(this, OverNoteService.class));
     }
 
     /**

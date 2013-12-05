@@ -42,6 +42,8 @@ public class AddClassListener implements View.OnClickListener {
 
     /**
      * On click method that we need to override for the implementation
+     * It pretty much is just a bunch of cascading windows, this could have been done differently, with different
+     * click listeners, but this works just as well, it is just a little confusing code
      *
      * @param view View that was clicked
      */
@@ -59,7 +61,7 @@ public class AddClassListener implements View.OnClickListener {
         Button save = (Button) date.findViewById(R.id.save);
         Button cancel = (Button) date.findViewById(R.id.cancel);
 
-        // sets the save listener
+        // sets the "continue" button click listener for the date picker
         save.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -80,12 +82,15 @@ public class AddClassListener implements View.OnClickListener {
                     repeat.setContentView(R.layout.repeated_dialog);
                     repeat.setTitle(context.getResources().getString(R.string.set_days));
 
+                    // finds the buttons on the repeat dialog
                     Button save = (Button) repeat.findViewById(R.id.save);
                     Button cancel = (Button) repeat.findViewById(R.id.cancel);
 
+                    // sets the click listener for the "continue" button on the repeat dialog
                     save.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            // gets all the checkboxes so we can find which ones were checked
                             boolean sunday = ((CheckBox) repeat.findViewById(R.id.sunday)).isChecked();
                             boolean monday = ((CheckBox) repeat.findViewById(R.id.monday)).isChecked();
                             boolean tuesday = ((CheckBox) repeat.findViewById(R.id.tuesday)).isChecked();
@@ -94,6 +99,7 @@ public class AddClassListener implements View.OnClickListener {
                             boolean friday = ((CheckBox) repeat.findViewById(R.id.friday)).isChecked();
                             boolean saturday = ((CheckBox) repeat.findViewById(R.id.saturday)).isChecked();
 
+                            // saves what days the user has the class
                             final String days = (sunday ? "S " : "") +
                                     (monday ? "M " : "") +
                                     (tuesday ? "T " : "") +
@@ -109,12 +115,15 @@ public class AddClassListener implements View.OnClickListener {
                             start.setContentView(R.layout.time_dialog);
                             start.setTitle(context.getResources().getString(R.string.start_time));
 
+                            // finds the buttons on the start time dialog
                             Button save = (Button) start.findViewById(R.id.save);
                             Button cancel = (Button) start.findViewById(R.id.cancel);
 
+                            // again, sets the "continue" button's action
                             save.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    // gets the pickers
                                     final int startHour = ((TimePicker) start.findViewById(R.id.timePicker)).getCurrentHour();
                                     final int startMinute = ((TimePicker) start.findViewById(R.id.timePicker)).getCurrentMinute();
 
@@ -125,19 +134,24 @@ public class AddClassListener implements View.OnClickListener {
                                     end.setContentView(R.layout.time_dialog);
                                     end.setTitle(context.getResources().getString(R.string.end_time));
 
+                                    // finds the save button this time along with cancel
                                     Button save = (Button) end.findViewById(R.id.save);
                                     save.setText(context.getResources().getString(R.string.save));
                                     Button cancel = (Button) end.findViewById(R.id.cancel);
 
+                                    // sets the final click listener
                                     save.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
+                                            // gets the end time pickers
                                             int endHour = ((TimePicker) end.findViewById(R.id.timePicker)).getCurrentHour();
                                             int endMinute = ((TimePicker) end.findViewById(R.id.timePicker)).getCurrentMinute();
 
+                                            // sets the start date object and gets the long time
                                             Date setDate = new Date(year, month, day, startHour, startMinute);
                                             final long setTime = setDate.getTime();
 
+                                            // sets the end time
                                             setDate = new Date(year, month, day, endHour, endMinute);
                                             final long endTime = setDate.getTime();
 
@@ -145,18 +159,25 @@ public class AddClassListener implements View.OnClickListener {
                                             SchoolClass newClass = new SchoolClass(className, setTime, endTime, days);
                                             SchoolData data = new SchoolData(context);
 
+                                            // opens and writes the class to the sql table
                                             data.open();
-                                            data.addClass(newClass);
+                                            long id = data.addClass(newClass);
 
+                                            scheduleAlarm(id, newClass);
+
+                                            // refreshes the adapter for the drawer so the user can see the new class
                                             drawerList.setAdapter(new ClassesCursorAdapter(context, data.getCursor()));
 
+                                            // closes the sql table
                                             data.close();
 
+                                            // dismisses the end time dialog
                                             end.dismiss();
 
                                         }
                                     });
 
+                                    // sets the cancel action for the end time dialog
                                     cancel.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
@@ -164,11 +185,13 @@ public class AddClassListener implements View.OnClickListener {
                                         }
                                     });
 
+                                    // shows the end time dialog
                                     end.show();
 
                                 }
                             });
 
+                            // sets the cancel action for the start time dialog
                             cancel.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -176,10 +199,12 @@ public class AddClassListener implements View.OnClickListener {
                                 }
                             });
 
+                            // shows the start time dialog
                             start.show();
                         }
                     });
 
+                    // sets the cancel action on the repeat dialog
                     cancel.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -187,6 +212,7 @@ public class AddClassListener implements View.OnClickListener {
                         }
                     });
 
+                    // shows the repeat dialog
                     repeat.show();
                 }
             }
@@ -201,8 +227,12 @@ public class AddClassListener implements View.OnClickListener {
             }
         });
 
-
+        // shows the first date picker
         date.show();
 
+    }
+
+    public void scheduleAlarm(long id, SchoolClass mClass) {
+        
     }
 }
