@@ -81,14 +81,16 @@ public class SchoolData {
      */
     public void deleteClass(String name) {
 
-        database.delete(SchoolHelper.TABLE_HOME, SchoolHelper.COLUMN_NAME
-                + " = " + name, null);
+        database.delete(SchoolHelper.TABLE_HOME, // table name
+                SchoolHelper.COLUMN_NAME + " = ?", // where clause
+                new String[] {name}); // where args
     }
 
     /**
      * Deletes all the classes in the database
      */
     public void deleteAllClasses() {
+        // deletes all the rows of the table
         database.delete(SchoolHelper.TABLE_HOME, null, null);
     }
 

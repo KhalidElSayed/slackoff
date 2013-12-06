@@ -283,7 +283,7 @@ public class BrowserActivity extends Activity {
         ListView drawerList = (ListView) findViewById(R.id.left_drawer);
         View footer = getLayoutInflater().inflate(R.layout.add_class, null, false);
         drawerList.addFooterView(footer);
-        drawerList.setAdapter(new ClassesCursorAdapter(this, data.getCursor()));
+        drawerList.setAdapter(new ClassesCursorAdapter(this, data.getCursor(), drawerList));
 
         footer.setOnClickListener(new AddClassListener(this, drawerList));
     }

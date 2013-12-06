@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.klinker.android.slackoff.R;
+import com.klinker.android.slackoff.sql.SchoolData;
 import com.klinker.android.slackoff.sql.SchoolHelper;
 
 import java.util.Date;
@@ -22,12 +25,17 @@ public class ClassesCursorAdapter extends CursorAdapter {
     /**
      * context of the app
      */
-    private Context context;
+    private Context mContext;
 
     /**
      * cursor to page through
      */
     private Cursor mCursor;
+
+    /**
+     * Holds the list view so it can be updated
+     */
+    private ListView drawerList;
 
     /**
      * Layout inflator to get the view from the xml
@@ -51,6 +59,11 @@ public class ClassesCursorAdapter extends CursorAdapter {
         public TextView end;
 
         /**
+         * holds the delete button
+         */
+        public ImageButton delete;
+
+        /**
          * holds the days of the week
          */
         public TextView sunday;
@@ -67,13 +80,15 @@ public class ClassesCursorAdapter extends CursorAdapter {
      *
      * @param context context of the app
      * @param cursor  cursor to go through
+     * @param drawerList list view that the cursor is being adapted to
      */
-    public ClassesCursorAdapter(Context context, Cursor cursor) {
+    public ClassesCursorAdapter(Context context, Cursor cursor, ListView drawerList) {
         // calls the super class constructor
         super(context, cursor, false);
 
-        this.context = context;
+        this.mContext = context;
         this.mCursor = cursor;
+        this.drawerList = drawerList;
         this.inflater = LayoutInflater.from(context);
     }
 
@@ -96,6 +111,7 @@ public class ClassesCursorAdapter extends CursorAdapter {
         holder.name = (TextView) v.findViewById(R.id.name);
         holder.start = (TextView) v.findViewById(R.id.start);
         holder.end = (TextView) v.findViewById(R.id.end);
+        holder.delete = (ImageButton) v.findViewById(R.id.delete_button);
         holder.sunday = (TextView) v.findViewById(R.id.sunday);
         holder.monday = (TextView) v.findViewById(R.id.monday);
         holder.tuesday = (TextView) v.findViewById(R.id.tuesday);
@@ -128,7 +144,7 @@ public class ClassesCursorAdapter extends CursorAdapter {
         View v;
         if (convertView == null) {
             // view is not being recycled
-            v = newView(context, mCursor, parent);
+            v = newView(mContext, mCursor, parent);
 
         } else {
             // view is recycled
@@ -138,7 +154,7 @@ public class ClassesCursorAdapter extends CursorAdapter {
 
         }
 
-        bindView(v, context, mCursor);
+        bindView(v, mContext, mCursor);
 
         return v;
     }
@@ -202,9 +218,22 @@ public class ClassesCursorAdapter extends CursorAdapter {
             holder.friday.setTextColor(context.getResources().getColor(R.color.dark_text));
         }
         if (mDays.contains("Sa ")) {
-            holder.sunday.setTextColor(context.getResources().getColor(R.color.dark_text));
+            holder.saturday.setTextColor(context.getResources().getColor(R.color.dark_text));
         }
 
+        // sets the click listener to delete the data when
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // opens up the school data sql database, then deletes the entry
+                SchoolData data = new SchoolData(mContext);
+                data.open();
+                data.deleteClass(mName);
 
+                // refreshes the class list by reseting the cursor adapter
+                drawerList.setAdapter(new ClassesCursorAdapter(mContext, data.getCursor(), drawerList));
+                data.close(); // closes the database
+            }
+        });
     }
 }

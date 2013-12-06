@@ -1,12 +1,17 @@
 package com.klinker.android.slackoff.listeners;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.adapter.ClassesCursorAdapter;
 import com.klinker.android.slackoff.data.SchoolClass;
+import com.klinker.android.slackoff.service.OverNoteService;
 import com.klinker.android.slackoff.sql.SchoolData;
 
 import java.util.Date;
@@ -71,7 +76,7 @@ public class AddClassListener implements View.OnClickListener {
                     // get the data
                     final int month = datePick.getMonth();
                     final int day = datePick.getDayOfMonth();
-                    final int year = datePick.getYear();
+                    final int year = datePick.getYear() - 1900; // 1900 is where it starts
                     final String className = name.getText().toString();
 
                     // dismiss the date picker dialog
@@ -166,7 +171,7 @@ public class AddClassListener implements View.OnClickListener {
                                             scheduleAlarm(id, newClass);
 
                                             // refreshes the adapter for the drawer so the user can see the new class
-                                            drawerList.setAdapter(new ClassesCursorAdapter(context, data.getCursor()));
+                                            drawerList.setAdapter(new ClassesCursorAdapter(context, data.getCursor(), drawerList));
 
                                             // closes the sql table
                                             data.close();
@@ -233,6 +238,13 @@ public class AddClassListener implements View.OnClickListener {
     }
 
     public void scheduleAlarm(long id, SchoolClass mClass) {
-        
+        Log.v("alarm_scheduled", "in here");
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        PendingIntent pendingIntent = PendingIntent.getService(context, 1, new Intent(context, OverNoteService.class), 0);
+
+        am.set(AlarmManager.RTC_WAKEUP, mClass.getStart(), pendingIntent);
+
+        Log.v("alarm_scheduled", new Date(mClass.getStart()).toString());
     }
 }
