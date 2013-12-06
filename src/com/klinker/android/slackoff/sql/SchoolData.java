@@ -1,11 +1,16 @@
 package com.klinker.android.slackoff.sql;
 
+import android.app.AlarmManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 import com.klinker.android.slackoff.data.SchoolClass;
+
+import java.util.Date;
 
 /**
  * Helper class for the database holding class information
@@ -114,13 +119,145 @@ public class SchoolData {
 
     public long[] updateTime(SchoolClass mClass) {
 
-        if (mClass.getDays().equals("")) {
-            deleteClass(mClass.getName());
-        }
-
         long start = 0;
         long end = 0;
         long id = 0;
+
+        if (mClass.getDays().equals("")) {
+            deleteClass(mClass.getName());
+        } else {
+
+            int numDaysToIncrement = 0;
+
+            String days = mClass.getDays();
+
+            boolean sunday = days.contains("S ");
+            boolean monday = days.contains("M ");
+            boolean tuesday = days.contains("T ");
+            boolean wednesday = days.contains("W ");
+            boolean thursday = days.contains("Th ");
+            boolean friday = days.contains("F ");
+            boolean saturday = days.contains("Sa ");
+
+            int currentDay = new Date(mClass.getStart()).getDay();
+
+            switch (currentDay) {
+                case 0: // sunday
+                    if (monday)
+                        numDaysToIncrement = 1;
+                    else if (tuesday)
+                        numDaysToIncrement = 2;
+                    else if (wednesday)
+                        numDaysToIncrement = 3;
+                    else if (thursday)
+                        numDaysToIncrement = 4;
+                    else if (friday)
+                        numDaysToIncrement = 5;
+                    else if (saturday)
+                        numDaysToIncrement = 6;
+                    break;
+                case 1: // monday
+                    if (tuesday)
+                        numDaysToIncrement = 1;
+                    else if (wednesday)
+                        numDaysToIncrement = 2;
+                    else if (thursday)
+                        numDaysToIncrement = 3;
+                    else if (friday)
+                        numDaysToIncrement = 4;
+                    else if (saturday)
+                        numDaysToIncrement = 5;
+                    else if (sunday)
+                        numDaysToIncrement = 6;
+                    break;
+                case 2: // tuesday
+                    if (wednesday)
+                        numDaysToIncrement = 1;
+                    else if (thursday)
+                        numDaysToIncrement = 2;
+                    else if (friday)
+                        numDaysToIncrement = 3;
+                    else if (saturday)
+                        numDaysToIncrement = 4;
+                    else if (sunday)
+                        numDaysToIncrement = 5;
+                    else if (monday)
+                        numDaysToIncrement = 6;
+                    break;
+                case 3: // wednesday
+                    if (thursday)
+                        numDaysToIncrement = 1;
+                    else if (friday)
+                        numDaysToIncrement = 2;
+                    else if (saturday)
+                        numDaysToIncrement = 3;
+                    else if (sunday)
+                        numDaysToIncrement = 4;
+                    else if (monday)
+                        numDaysToIncrement = 5;
+                    else if (tuesday)
+                        numDaysToIncrement = 6;
+                    break;
+                case 4: // thursday
+                    if (friday)
+                        numDaysToIncrement = 1;
+                    else if (saturday)
+                        numDaysToIncrement = 2;
+                    else if (sunday)
+                        numDaysToIncrement = 3;
+                    else if (monday)
+                        numDaysToIncrement = 4;
+                    else if (tuesday)
+                        numDaysToIncrement = 5;
+                    else if (wednesday)
+                        numDaysToIncrement = 6;
+                    break;
+                case 5: // friday
+                    if (saturday)
+                        numDaysToIncrement = 1;
+                    else if (sunday)
+                        numDaysToIncrement = 2;
+                    else if (monday)
+                        numDaysToIncrement = 3;
+                    else if (tuesday)
+                        numDaysToIncrement = 4;
+                    else if (wednesday)
+                        numDaysToIncrement = 5;
+                    else if (thursday)
+                        numDaysToIncrement = 6;
+                    break;
+                case 6: // saturday
+                    if (sunday)
+                        numDaysToIncrement = 1;
+                    else if (monday)
+                        numDaysToIncrement = 2;
+                    else if (tuesday)
+                        numDaysToIncrement = 3;
+                    else if (wednesday)
+                        numDaysToIncrement = 4;
+                    else if (thursday)
+                        numDaysToIncrement = 5;
+                    else if (friday)
+                        numDaysToIncrement = 6;
+                    break;
+            }
+
+            start = mClass.getStart() + (numDaysToIncrement * AlarmManager.INTERVAL_DAY);
+            end = mClass.getEnd() + (numDaysToIncrement * AlarmManager.INTERVAL_DAY);
+
+            Log.v("scheduling_days", new Date(start).toString());
+            Log.v("scheduling_days", new Date(end).toString());
+
+            // content values to increment
+            ContentValues cv = new ContentValues();
+            cv.put(SchoolHelper.COLUMN_START_TIME, start);
+            cv.put(SchoolHelper.COLUMN_END_TIME, end);
+
+            database.update(SchoolHelper.TABLE_HOME,    // table name
+                    cv,                                 // table values
+                    SchoolHelper.COLUMN_NAME + " = ?",  // where clause
+                    new String[] {mClass.getName()});   // where args
+        }
 
         return new long[] {start, end, id};
     }

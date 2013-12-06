@@ -52,14 +52,25 @@ public class OverNoteKiller extends IntentService {
 
         data.close();
 
-        // schedules the next alarm for the next class
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getService(context, (int) newTimes[2], new Intent(context, OverNoteService.class), 0);
-        am.set(AlarmManager.RTC_WAKEUP, newTimes[0], pendingIntent);
+        if (newTimes[0] != 0) {
+            // schedules the next alarm for the next class
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        // schedule the killer alarm
-        PendingIntent killerServ = PendingIntent.getService(context, (int) newTimes[2] + 1, new Intent(context, OverNoteKiller.class), 0);
-        am.set(AlarmManager.RTC_WAKEUP, newTimes[1], killerServ);
+            PendingIntent pendingIntent = PendingIntent.getService(context, // context
+                    (int) newTimes[2], // id
+                    new Intent(context, OverNoteService.class), // intent
+                    0); // extra flags (none here)
+
+            am.set(AlarmManager.RTC_WAKEUP, newTimes[0], pendingIntent);
+
+            // schedule the killer alarm
+            PendingIntent killerServ = PendingIntent.getService(context,
+                    (int) newTimes[2] + 1,
+                    new Intent(context, OverNoteKiller.class),
+                    0);
+
+            am.set(AlarmManager.RTC_WAKEUP, newTimes[1], killerServ);
+        }
     }
 
     /**
