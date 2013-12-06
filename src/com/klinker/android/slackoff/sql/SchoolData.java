@@ -111,4 +111,17 @@ public class SchoolData {
 
         return cursor;
     }
+
+    public long[] updateTime(SchoolClass mClass) {
+
+        if (mClass.getDays().equals("")) {
+            deleteClass(mClass.getName());
+        }
+
+        long start = 0;
+        long end = 0;
+        long id = 0;
+
+        return new long[] {start, end, id};
+    }
 }

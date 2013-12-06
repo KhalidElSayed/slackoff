@@ -40,5 +40,6 @@
         </activity>
 
         <service android:name=".service.OverNoteService"/>
+        <service android:name=".service.OverNoteKiller"/>
     </application>
 </manifest>

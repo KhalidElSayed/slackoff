@@ -1,6 +1,9 @@
 package com.klinker.android.slackoff.adapter;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.klinker.android.slackoff.R;
+import com.klinker.android.slackoff.service.OverNoteKiller;
+import com.klinker.android.slackoff.service.OverNoteService;
 import com.klinker.android.slackoff.sql.SchoolData;
 import com.klinker.android.slackoff.sql.SchoolHelper;
 
@@ -233,6 +238,14 @@ public class ClassesCursorAdapter extends CursorAdapter {
                 // refreshes the class list by reseting the cursor adapter
                 drawerList.setAdapter(new ClassesCursorAdapter(mContext, data.getCursor(), drawerList));
                 data.close(); // closes the database
+
+                // cancels the alarms
+                AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+                
+                PendingIntent pendingIntent = PendingIntent.getService(mContext, (int) mStart, new Intent(mContext, OverNoteService.class), 0);
+                am.cancel(pendingIntent);
+                PendingIntent killerServ = PendingIntent.getService(mContext, (int) mEnd + 1, new Intent(mContext, OverNoteKiller.class), 0);
+                am.cancel(killerServ);
             }
         });
     }

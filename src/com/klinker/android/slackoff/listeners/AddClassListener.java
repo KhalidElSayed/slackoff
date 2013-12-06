@@ -14,6 +14,7 @@ import com.klinker.android.slackoff.adapter.ClassesCursorAdapter;
 import com.klinker.android.slackoff.adapter.FileListAdapter;
 import com.klinker.android.slackoff.data.NoteFile;
 import com.klinker.android.slackoff.data.SchoolClass;
+import com.klinker.android.slackoff.service.OverNoteKiller;
 import com.klinker.android.slackoff.service.OverNoteService;
 import com.klinker.android.slackoff.sql.SchoolData;
 import com.klinker.android.slackoff.utils.Utils;
@@ -262,14 +263,13 @@ public class AddClassListener implements View.OnClickListener {
      * @param mClass the class to schedule for
      */
     public void scheduleAlarm(long id, SchoolClass mClass) {
-        Log.v("alarm_scheduled", "in here");
+
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
         PendingIntent pendingIntent = PendingIntent.getService(context, (int) id, new Intent(context, OverNoteService.class), 0);
-
         am.set(AlarmManager.RTC_WAKEUP, mClass.getStart(), pendingIntent);
 
-        Log.v("alarm_scheduled", new Date(mClass.getStart()).toString());
+        PendingIntent killerServ = PendingIntent.getService(context, (int) id + 1, new Intent(context, OverNoteKiller.class), 0);
+        am.set(AlarmManager.RTC_WAKEUP, mClass.getEnd(), killerServ);
     }
 
     /**

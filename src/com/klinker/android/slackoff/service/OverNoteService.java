@@ -309,7 +309,7 @@ public class OverNoteService extends Service {
             stopForeground(true);
             stopSelf();
 
-            // the receiver will be unregisterd in the onDestroy
+            // the receiver will be unregistered in the onDestroy
         }
     };
 
