@@ -16,7 +16,7 @@ import java.util.Date;
 /**
  * Service to kill and schedule the next alarm for the class
  *
- * @author Luke and Jake Klinker
+ * @author Luke Klinker
  */
 public class OverNoteKiller extends IntentService {
 

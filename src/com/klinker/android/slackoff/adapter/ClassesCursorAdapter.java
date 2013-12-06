@@ -23,7 +23,7 @@ import java.util.Date;
 /**
  * Adapter for handling the class schedule in the drawer
  *
- * @author Jake and Luke Klinker
+ * @author Luke Klinker
  */
 public class ClassesCursorAdapter extends CursorAdapter {
 

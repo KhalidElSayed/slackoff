@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Helper class for the database holding class information
  *
- * @author Jake and Luke Klinker
+ * @author Luke Klinker
  */
 public class SchoolData {
 
@@ -117,13 +117,22 @@ public class SchoolData {
         return cursor;
     }
 
+    /**
+     * method to update the time on the class and write it into the database
+     *
+     * @param mClass the SchoolClass object that should be updated
+     * @return long with the first index as the start time, second index as the end time, and 3rd index as the id
+     */
     public long[] updateTime(SchoolClass mClass) {
 
         long start = 0;
         long end = 0;
         long id = 0;
 
+        // checks to see if it should be rescheduled
         if (mClass.getDays().equals("")) {
+
+            // if not, delete the class from the database
             deleteClass(mClass.getName());
         } else {
 
@@ -261,9 +270,6 @@ public class SchoolData {
             // sets the next start time to the class depending on how many days forward to look
             start = mClass.getStart() + (numDaysToIncrement * AlarmManager.INTERVAL_DAY);
             end = mClass.getEnd() + (numDaysToIncrement * AlarmManager.INTERVAL_DAY);
-
-            Log.v("scheduling_days", new Date(start).toString());
-            Log.v("scheduling_days", new Date(end).toString());
 
             // content values to increment
             ContentValues cv = new ContentValues();
