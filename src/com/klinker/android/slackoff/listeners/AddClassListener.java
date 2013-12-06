@@ -5,15 +5,23 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.adapter.ClassesCursorAdapter;
+import com.klinker.android.slackoff.adapter.FileListAdapter;
+import com.klinker.android.slackoff.data.NoteFile;
 import com.klinker.android.slackoff.data.SchoolClass;
 import com.klinker.android.slackoff.service.OverNoteService;
 import com.klinker.android.slackoff.sql.SchoolData;
+import com.klinker.android.slackoff.utils.Utils;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -35,14 +43,20 @@ public class AddClassListener implements View.OnClickListener {
     private ListView drawerList;
 
     /**
+     * List view for the directories so we can refresh it too
+     */
+    private ListView directories;
+
+    /**
      * Constructor for the listener
      *
      * @param context the context of the app
      * @param list    The list view
      */
-    public AddClassListener(Context context, ListView list) {
+    public AddClassListener(Context context, ListView list, ListView dir) {
         this.context = context;
         this.drawerList = list;
+        this.directories = dir;
     }
 
     /**
@@ -168,7 +182,11 @@ public class AddClassListener implements View.OnClickListener {
                                             data.open();
                                             long id = data.addClass(newClass);
 
+                                            // schedules the alarm for the class
                                             scheduleAlarm(id, newClass);
+
+                                            // creates the folder for the class
+                                            createFolder(newClass);
 
                                             // refreshes the adapter for the drawer so the user can see the new class
                                             drawerList.setAdapter(new ClassesCursorAdapter(context, data.getCursor(), drawerList));
@@ -237,14 +255,77 @@ public class AddClassListener implements View.OnClickListener {
 
     }
 
+    /**
+     * function to schdule the alarms to start and end the service
+     *
+     * @param id id for the alarm, same as id for the class in the database
+     * @param mClass the class to schedule for
+     */
     public void scheduleAlarm(long id, SchoolClass mClass) {
         Log.v("alarm_scheduled", "in here");
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        PendingIntent pendingIntent = PendingIntent.getService(context, 1, new Intent(context, OverNoteService.class), 0);
+        PendingIntent pendingIntent = PendingIntent.getService(context, (int) id, new Intent(context, OverNoteService.class), 0);
 
         am.set(AlarmManager.RTC_WAKEUP, mClass.getStart(), pendingIntent);
 
         Log.v("alarm_scheduled", new Date(mClass.getStart()).toString());
     }
+
+    /**
+     * creates the new class folder and updates the listview of folders
+     *
+     * @param newClass the class to make a folder for
+     */
+    public void createFolder(SchoolClass newClass) {
+        File parent = new File(Environment.getExternalStorageDirectory().getPath(), "SlackOff");
+
+        File newClassFold = new File (parent, newClass.getName());
+        if (!newClassFold.exists()) {
+            newClassFold.mkdirs();
+        }
+
+        ArrayList<NoteFile> dirs = new ArrayList<NoteFile>();
+
+        // get a list of all files in the parent directory and sort them in alphabetical order
+        File[] dirFiles = parent.listFiles();
+        Arrays.sort(dirFiles, fileComparator);
+
+        // add sorted files to the correct array list to be used in adapters
+        for (File file : dirFiles) {
+            if (file.isDirectory()) {
+                dirs.add(new NoteFile(file));
+            } else {
+                if (file.getName().endsWith(Utils.EXTENSION)) {
+                    dirs.add(new NoteFile(file));
+                }
+            }
+        }
+
+        // updates the directories with the new one
+        directories.setAdapter(new FileListAdapter(context, dirs, true));
+    }
+
+    /**
+     * the comparator used to determine alphabetical order of files when they are being sorted
+     */
+    private Comparator<File> fileComparator = new Comparator<File>() {
+        @Override
+        public int compare(File file1, File file2) {
+            if (file1.isDirectory()) {
+                if (file2.isDirectory()) {
+                    return String.valueOf(file1.getName().toLowerCase()).compareTo(file2.getName().toLowerCase());
+                } else {
+                    return -1;
+                }
+            } else {
+                if (file2.isDirectory()) {
+                    return 1;
+                } else {
+                    return String.valueOf(file1.getName().toLowerCase()).compareTo(file2.getName().toLowerCase());
+                }
+            }
+
+        }
+    };
 }

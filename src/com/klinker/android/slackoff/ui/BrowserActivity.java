@@ -285,7 +285,7 @@ public class BrowserActivity extends Activity {
         drawerList.addFooterView(footer);
         drawerList.setAdapter(new ClassesCursorAdapter(this, data.getCursor(), drawerList));
 
-        footer.setOnClickListener(new AddClassListener(this, drawerList));
+        footer.setOnClickListener(new AddClassListener(this, drawerList, folderList));
     }
 
     /**
