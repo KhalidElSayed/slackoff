@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.klinker.android.slackoff.data.SchoolClass;
 
@@ -15,7 +14,7 @@ import java.util.Date;
 /**
  * Helper class for the database holding class information
  *
- * @author Luke Klinker
+ * @author Luke and Jake Klinker
  */
 public class SchoolData {
 
@@ -76,7 +75,7 @@ public class SchoolData {
         values.put(SchoolHelper.COLUMN_DAYS, mClass.getDays());
 
         // inserts a new column in the database, returning the id
-        return database.insert(SchoolHelper.TABLE_HOME, null, values);
+        return database.insert(SchoolHelper.TABLE_CLASSES, null, values);
     }
 
     /**
@@ -86,7 +85,7 @@ public class SchoolData {
      */
     public void deleteClass(String name) {
 
-        database.delete(SchoolHelper.TABLE_HOME, // table name
+        database.delete(SchoolHelper.TABLE_CLASSES, // table name
                 SchoolHelper.COLUMN_NAME + " = ?", // where clause
                 new String[] {name}); // where args
     }
@@ -96,7 +95,7 @@ public class SchoolData {
      */
     public void deleteAllClasses() {
         // deletes all the rows of the table
-        database.delete(SchoolHelper.TABLE_HOME, null, null);
+        database.delete(SchoolHelper.TABLE_CLASSES, null, null);
     }
 
     /**
@@ -106,7 +105,7 @@ public class SchoolData {
      */
     public Cursor getCursor() {
 
-        Cursor cursor = database.query(SchoolHelper.TABLE_HOME, // table name
+        Cursor cursor = database.query(SchoolHelper.TABLE_CLASSES, // table name
                 allColumns, // projection (columns to query)
                 null, // selection clause
                 null, // selection args
@@ -276,7 +275,7 @@ public class SchoolData {
             cv.put(SchoolHelper.COLUMN_START_TIME, start);
             cv.put(SchoolHelper.COLUMN_END_TIME, end);
 
-            database.update(SchoolHelper.TABLE_HOME,    // table name
+            database.update(SchoolHelper.TABLE_CLASSES,    // table name
                     cv,                                 // table values
                     SchoolHelper.COLUMN_NAME + " = ?",  // where clause
                     new String[] {mClass.getName()});   // where args

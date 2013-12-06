@@ -14,6 +14,7 @@ import android.view.*;
 import android.widget.Button;
 import android.widget.EditText;
 import com.klinker.android.slackoff.R;
+import com.klinker.android.slackoff.data.SchoolClass;
 import com.klinker.android.slackoff.ui.BrowserActivity;
 import com.klinker.android.slackoff.utils.IOUtils;
 
@@ -71,14 +72,21 @@ public class OverNoteService extends Service {
         filter.addAction("com.klinker.android.notes.STOP_NOTES");
         registerReceiver(stopNotes, filter);
 
+        SchoolClass mClass = OverNoteKiller.getCurrentClass(mContext);
+
+        // makes the notification for the foreground service
         Notification notification = new Notification(R.drawable.ic_launcher, getResources().getString(R.string.app_name),
                 System.currentTimeMillis());
         Intent notificationIntent = new Intent(this, BrowserActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-        notification.setLatestEventInfo(this, getResources().getString(R.string.app_name),
-                "Click to open", pendingIntent);
+        notification.setLatestEventInfo(this, // service
+                getResources().getString(R.string.app_name), // Main title
+                mClass.getName(), // notification content
+                pendingIntent); // intent to be called when clicked
 
-        // because ice cream sandwhich doesn't support this
+        // because ice cream sandwhich doesn't support this functionality
+        // this will hide the notification from the status bar. It will only be visible when
+        // pulling down the notification tray
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             notification.priority = Notification.PRIORITY_MIN;
         }
@@ -119,6 +127,7 @@ public class OverNoteService extends Service {
                         case MotionEvent.ACTION_DOWN:
 
                             // Vibrate
+                            v.vibrate(200);
 
                             return true;
 
@@ -132,8 +141,6 @@ public class OverNoteService extends Service {
                             return true;
 
                         case MotionEvent.ACTION_UP:
-
-                            // set the view
 
                             return true;
                     }
@@ -287,6 +294,7 @@ public class OverNoteService extends Service {
 
     /**
      * Binds the service
+     * We don't do anything here, but it must be impemented for the service
      *
      * @param intent
      * @return

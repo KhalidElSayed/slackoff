@@ -64,9 +64,7 @@ public class BootReceiver extends BroadcastReceiver {
                         0);
 
                 am.set(AlarmManager.RTC_WAKEUP, endTime, killerServ);
-                
-                Log.v("boot_scheduling_days", new Date(startTime).toString());
-                Log.v("boot_scheduling_days", new Date(endTime).toString());
+
             } while (c.moveToNext());
         }
 

@@ -5,10 +5,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * Helper class to create the sql database
+ *
+ * @author Luke Klinker
+ */
 public class SchoolHelper extends SQLiteOpenHelper {
 
     // database information
-    public static final String TABLE_HOME = "classes";
+    public static final String TABLE_CLASSES = "classes";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_START_TIME = "start";
@@ -20,7 +25,7 @@ public class SchoolHelper extends SQLiteOpenHelper {
 
     // Database creation sql statement
     private static final String DATABASE_CREATE = "create table "
-            + TABLE_HOME + "(" + COLUMN_ID
+            + TABLE_CLASSES + "(" + COLUMN_ID
             + " integer primary key, " + COLUMN_NAME
             + " text class name, " + COLUMN_START_TIME
             + " integer long start time, " + COLUMN_END_TIME
@@ -58,7 +63,7 @@ public class SchoolHelper extends SQLiteOpenHelper {
         Log.w(SchoolHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HOME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASSES);
         onCreate(db);
     }
 
