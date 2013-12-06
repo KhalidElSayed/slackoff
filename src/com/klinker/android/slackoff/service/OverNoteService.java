@@ -17,6 +17,7 @@ import com.klinker.android.slackoff.R;
 import com.klinker.android.slackoff.data.SchoolClass;
 import com.klinker.android.slackoff.ui.BrowserActivity;
 import com.klinker.android.slackoff.utils.IOUtils;
+import com.klinker.android.slackoff.utils.Utils;
 
 /**
  * Service which controls overnote
@@ -72,7 +73,7 @@ public class OverNoteService extends Service {
         filter.addAction("com.klinker.android.notes.STOP_NOTES");
         registerReceiver(stopNotes, filter);
 
-        SchoolClass mClass = OverNoteKiller.getCurrentClass(mContext);
+        SchoolClass mClass = Utils.getCurrentClass(mContext);
 
         // makes the notification for the foreground service
         Notification notification = new Notification(R.drawable.ic_launcher, getResources().getString(R.string.app_name),
