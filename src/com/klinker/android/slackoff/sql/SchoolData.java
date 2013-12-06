@@ -131,6 +131,7 @@ public class SchoolData {
 
             String days = mClass.getDays();
 
+            // gets what days the class is active
             boolean sunday = days.contains("S ");
             boolean monday = days.contains("M ");
             boolean tuesday = days.contains("T ");
@@ -141,6 +142,7 @@ public class SchoolData {
 
             int currentDay = new Date(mClass.getStart()).getDay();
 
+            // uses the current day of the week to find out how many days forward to look for the next instance of the class
             switch (currentDay) {
                 case 0: // sunday
                     if (monday)
@@ -242,6 +244,7 @@ public class SchoolData {
                     break;
             }
 
+            // sets the next start time to the class depending on how many days forward to look
             start = mClass.getStart() + (numDaysToIncrement * AlarmManager.INTERVAL_DAY);
             end = mClass.getEnd() + (numDaysToIncrement * AlarmManager.INTERVAL_DAY);
 

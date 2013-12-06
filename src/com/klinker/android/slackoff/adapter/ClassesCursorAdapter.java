@@ -181,6 +181,7 @@ public class ClassesCursorAdapter extends CursorAdapter {
         final String mDays = cursor.getString(cursor.getColumnIndex(SchoolHelper.COLUMN_DAYS));
         final long mStart = cursor.getLong(cursor.getColumnIndex(SchoolHelper.COLUMN_START_TIME));
         final long mEnd = cursor.getLong(cursor.getColumnIndex(SchoolHelper.COLUMN_END_TIME));
+        final long mId = cursor.getLong(cursor.getColumnIndex(SchoolHelper.COLUMN_ID));
 
         // sets the info to the view
         holder.name.setText(mName);
@@ -242,9 +243,9 @@ public class ClassesCursorAdapter extends CursorAdapter {
                 // cancels the alarms
                 AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
                 
-                PendingIntent pendingIntent = PendingIntent.getService(mContext, (int) mStart, new Intent(mContext, OverNoteService.class), 0);
+                PendingIntent pendingIntent = PendingIntent.getService(mContext, (int) mId, new Intent(mContext, OverNoteService.class), 0);
                 am.cancel(pendingIntent);
-                PendingIntent killerServ = PendingIntent.getService(mContext, (int) mEnd + 1, new Intent(mContext, OverNoteKiller.class), 0);
+                PendingIntent killerServ = PendingIntent.getService(mContext, (int) mId + 1, new Intent(mContext, OverNoteKiller.class), 0);
                 am.cancel(killerServ);
             }
         });
