@@ -2,6 +2,7 @@ package com.klinker.android.slackoff.utils;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -155,12 +156,20 @@ public class Utils {
 
             } while (flag && cursor.moveToNext());
 
-            cursor.moveToPrevious();
+            try {
+                name = cursor.getString(cursor.getColumnIndex(SchoolHelper.COLUMN_NAME));
+                days = cursor.getString(cursor.getColumnIndex(SchoolHelper.COLUMN_DAYS));
+                end = cursor.getLong(cursor.getColumnIndex(SchoolHelper.COLUMN_END_TIME));
+                start = cursor.getLong(cursor.getColumnIndex(SchoolHelper.COLUMN_START_TIME));
+            } catch (CursorIndexOutOfBoundsException e) {
 
-            name = cursor.getString(cursor.getColumnIndex(SchoolHelper.COLUMN_NAME));
-            days = cursor.getString(cursor.getColumnIndex(SchoolHelper.COLUMN_DAYS));
-            end = cursor.getLong(cursor.getColumnIndex(SchoolHelper.COLUMN_END_TIME));
-            start = cursor.getLong(cursor.getColumnIndex(SchoolHelper.COLUMN_START_TIME));
+                cursor.moveToPrevious();
+
+                name = cursor.getString(cursor.getColumnIndex(SchoolHelper.COLUMN_NAME));
+                days = cursor.getString(cursor.getColumnIndex(SchoolHelper.COLUMN_DAYS));
+                end = cursor.getLong(cursor.getColumnIndex(SchoolHelper.COLUMN_END_TIME));
+                start = cursor.getLong(cursor.getColumnIndex(SchoolHelper.COLUMN_START_TIME));
+            }
         }
 
         // close the database

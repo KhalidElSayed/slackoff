@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.*;
 import android.widget.Button;
@@ -274,12 +276,17 @@ public class OverNoteService extends Service {
                 // makes sure they aren't blank
                 if (name.getText().length() > 0 && content.getText().length() > 0) {
                     // save has been clicked. we want to save the data, then simulate a discard clicked
-
+                    
                     // use a thread so that the io doesn't clog up the ui thread
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            IOUtils.writeFile(mContext, content.getText().toString(), name.getText().toString());
+                            // formats the string so it can be read in a nicer way in our app
+                            String text = content.getText().toString();
+                            text = text.replaceAll("\n\n", "\n");
+                            text = text.replaceAll("\n", "\n_[0]_");
+
+                            IOUtils.writeFile(mContext, text, name.getText().toString());
                         }
                     }).start();
 
