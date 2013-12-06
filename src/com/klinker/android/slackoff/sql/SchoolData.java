@@ -157,6 +157,8 @@ public class SchoolData {
                         numDaysToIncrement = 5;
                     else if (saturday)
                         numDaysToIncrement = 6;
+                    else if (sunday)
+                        numDaysToIncrement = 7;
                     break;
                 case 1: // monday
                     if (tuesday)
@@ -171,6 +173,8 @@ public class SchoolData {
                         numDaysToIncrement = 5;
                     else if (sunday)
                         numDaysToIncrement = 6;
+                    else if (monday)
+                        numDaysToIncrement = 7;
                     break;
                 case 2: // tuesday
                     if (wednesday)
@@ -185,6 +189,8 @@ public class SchoolData {
                         numDaysToIncrement = 5;
                     else if (monday)
                         numDaysToIncrement = 6;
+                    else if (tuesday)
+                        numDaysToIncrement = 7;
                     break;
                 case 3: // wednesday
                     if (thursday)
@@ -199,6 +205,8 @@ public class SchoolData {
                         numDaysToIncrement = 5;
                     else if (tuesday)
                         numDaysToIncrement = 6;
+                    else if (wednesday)
+                        numDaysToIncrement = 7;
                     break;
                 case 4: // thursday
                     if (friday)
@@ -213,6 +221,8 @@ public class SchoolData {
                         numDaysToIncrement = 5;
                     else if (wednesday)
                         numDaysToIncrement = 6;
+                    else if (thursday)
+                        numDaysToIncrement = 7;
                     break;
                 case 5: // friday
                     if (saturday)
@@ -227,6 +237,8 @@ public class SchoolData {
                         numDaysToIncrement = 5;
                     else if (thursday)
                         numDaysToIncrement = 6;
+                    else if (friday)
+                        numDaysToIncrement = 7;
                     break;
                 case 6: // saturday
                     if (sunday)
@@ -241,6 +253,8 @@ public class SchoolData {
                         numDaysToIncrement = 5;
                     else if (friday)
                         numDaysToIncrement = 6;
+                    else if (saturday)
+                        numDaysToIncrement = 7;
                     break;
             }
 
