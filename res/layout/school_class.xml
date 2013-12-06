@@ -2,22 +2,24 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/pressed_background"
-    android:padding="10dp">
+    android:layout_height="wrap_content"
+    android:paddingBottom="1dp"
+    android:background="@color/folder_outline"
+    android:layout_marginRight="10dp"
+    android:layout_marginLeft="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="10dp">
+        android:background="@drawable/pressed_background"
+        android:gravity="center_vertical" >
 
         <ImageButton
             android:id="@+id/delete_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/pressed_button_over_note"
+            android:background="@color/folder_background"
             android:src="@drawable/ic_discard"/>
 
         <LinearLayout
@@ -64,14 +66,17 @@
 
 
     <LinearLayout
+        android:paddingTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/pressed_background">
 
         <TextView
             android:id="@+id/sunday"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="Sun"
             android:textColor="@color/light_text" />
         <TextView
@@ -80,6 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Mon"
+            android:gravity="center"
             android:textColor="@color/light_text" />
         <TextView
             android:id="@+id/tuesday"
@@ -87,6 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Tue"
+            android:gravity="center"
             android:textColor="@color/light_text" />
         <TextView
             android:id="@+id/wednesday"
@@ -94,6 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Wed"
+            android:gravity="center"
             android:textColor="@color/light_text" />
         <TextView
             android:id="@+id/thursday"
@@ -101,6 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Thu"
+            android:gravity="center"
             android:textColor="@color/light_text" />
         <TextView
             android:id="@+id/friday"
@@ -108,6 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Fri"
+            android:gravity="center"
             android:textColor="@color/light_text" />
         <TextView
             android:id="@+id/saturday"
@@ -115,6 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Sat"
+            android:gravity="center"
             android:textColor="@color/light_text" />
         </LinearLayout>
 
