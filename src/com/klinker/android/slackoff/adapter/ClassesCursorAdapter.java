@@ -241,7 +241,7 @@ public class ClassesCursorAdapter extends CursorAdapter {
 
                 // cancels the alarms
                 AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-                
+
                 PendingIntent pendingIntent = PendingIntent.getService(mContext, (int) mStart, new Intent(mContext, OverNoteService.class), 0);
                 am.cancel(pendingIntent);
                 PendingIntent killerServ = PendingIntent.getService(mContext, (int) mEnd + 1, new Intent(mContext, OverNoteKiller.class), 0);
