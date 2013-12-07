@@ -12,5 +12,7 @@ Executive Summary:
 	- Add new folders and files easily from the Action Bar
 	- Rename or delete a folder or note easily with a long click
 	- Attach pictures to your notes
+	- Stores data in SQLite databases
+	- Uses unique UI features such as the alert window and the navigation drawer
 
 	Never worry about missing those important points or forgetting about an assignment again! Our note app was created by students for students, because we know how often they are on their phones during class, not paying attention and only catching the quick, "this will be on the test!" keyboard.
