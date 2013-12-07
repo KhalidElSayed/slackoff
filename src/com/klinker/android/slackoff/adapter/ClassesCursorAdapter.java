@@ -17,13 +17,14 @@ import com.klinker.android.slackoff.service.OverNoteKiller;
 import com.klinker.android.slackoff.service.OverNoteService;
 import com.klinker.android.slackoff.sql.SchoolData;
 import com.klinker.android.slackoff.sql.SchoolHelper;
+import com.klinker.android.slackoff.utils.IOUtils;
 
 import java.util.Date;
 
 /**
  * Adapter for handling the class schedule in the drawer
  *
- * @author Jake and Luke Klinker
+ * @author Luke Klinker
  */
 public class ClassesCursorAdapter extends CursorAdapter {
 
@@ -109,10 +110,13 @@ public class ClassesCursorAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
         View v;
         final ViewHolder holder;
+        // inflates view so that we can get the attributes
         v = inflater.inflate(R.layout.school_class, viewGroup, false);
 
+        // creates the view holder object
         holder = new ViewHolder();
 
+        // writes the attributes to the viewholder
         holder.name = (TextView) v.findViewById(R.id.name);
         holder.start = (TextView) v.findViewById(R.id.start);
         holder.end = (TextView) v.findViewById(R.id.end);
@@ -125,8 +129,10 @@ public class ClassesCursorAdapter extends CursorAdapter {
         holder.friday = (TextView) v.findViewById(R.id.friday);
         holder.saturday = (TextView) v.findViewById(R.id.saturday);
 
+        // sets the tags so that we can get them later
         v.setTag(holder);
 
+        // return the view we created
         return v;
     }
 
@@ -181,6 +187,7 @@ public class ClassesCursorAdapter extends CursorAdapter {
         final String mDays = cursor.getString(cursor.getColumnIndex(SchoolHelper.COLUMN_DAYS));
         final long mStart = cursor.getLong(cursor.getColumnIndex(SchoolHelper.COLUMN_START_TIME));
         final long mEnd = cursor.getLong(cursor.getColumnIndex(SchoolHelper.COLUMN_END_TIME));
+        final long mId = cursor.getLong(cursor.getColumnIndex(SchoolHelper.COLUMN_ID));
 
         // sets the info to the view
         holder.name.setText(mName);
@@ -239,12 +246,15 @@ public class ClassesCursorAdapter extends CursorAdapter {
                 drawerList.setAdapter(new ClassesCursorAdapter(mContext, data.getCursor(), drawerList));
                 data.close(); // closes the database
 
-                // cancels the alarms
-                AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+                // close down the overnote service if it is running for this class
 
-                PendingIntent pendingIntent = PendingIntent.getService(mContext, (int) mStart, new Intent(mContext, OverNoteService.class), 0);
+
+                // cancels the alarms by recreating the same pending intent, then using the alarm manager to cancel it
+                AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+                
+                PendingIntent pendingIntent = PendingIntent.getService(mContext, (int) mId, new Intent(mContext, OverNoteService.class), 0);
                 am.cancel(pendingIntent);
-                PendingIntent killerServ = PendingIntent.getService(mContext, (int) mEnd + 1, new Intent(mContext, OverNoteKiller.class), 0);
+                PendingIntent killerServ = PendingIntent.getService(mContext, (int) mId + 1, new Intent(mContext, OverNoteKiller.class), 0);
                 am.cancel(killerServ);
             }
         });

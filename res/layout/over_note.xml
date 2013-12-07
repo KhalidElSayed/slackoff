@@ -47,6 +47,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:inputType="textAutoComplete|textAutoCorrect|textCapSentences"/>
+            android:inputType="textAutoComplete|textAutoCorrect|textCapSentences|textMultiLine"
+            android:imeOptions="actionNone"/>
 
 </LinearLayout>

@@ -5,16 +5,26 @@
           android:versionName="1.0">
 
 
-    <!-- needed for reading the file system -->
+    <!-- write to storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <!-- create the overnote window -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <!-- manually vibrate -->
     <uses-permission android:name="android.permission.VIBRATE"/>
 
+    <!-- run at boot -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <!-- targeted at kitkat, but will work on ICS and above -->
     <uses-sdk android:minSdkVersion="14"
               android:targetSdkVersion="19"/>
 
     <application android:label="@string/app_name"
                  android:icon="@drawable/ic_launcher">
+
+        <!-- Main activity for the program, called from the launcher -->
         <activity android:name=".ui.BrowserActivity"
                   android:label="@string/app_name"
                   android:theme="@style/AppTheme">
@@ -24,10 +34,14 @@
             </intent-filter>
         </activity>
 
+        <!-- Note viewer -->
         <activity android:name=".ui.NoteActivity"
                   android:theme="@style/AppTheme"
                   android:label="@string/app_name"
                   android:windowSoftInputMode="stateHidden">
+
+            <!-- so they can be viewed from any other generic file browser.
+                 this will cause it to open up this activity from those other browswers -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -39,7 +53,16 @@
             </intent-filter>
         </activity>
 
+        <!-- services that we need to register to the system -->
         <service android:name=".service.OverNoteService"/>
         <service android:name=".service.OverNoteKiller"/>
+
+        <!-- receives the boot completed broadcast and starts the receiver -->
+        <receiver android:name=".service.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>

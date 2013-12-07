@@ -9,13 +9,17 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.*;
 import android.widget.Button;
 import android.widget.EditText;
 import com.klinker.android.slackoff.R;
+import com.klinker.android.slackoff.data.SchoolClass;
 import com.klinker.android.slackoff.ui.BrowserActivity;
 import com.klinker.android.slackoff.utils.IOUtils;
+import com.klinker.android.slackoff.utils.Utils;
 
 /**
  * Service which controls overnote
@@ -71,14 +75,21 @@ public class OverNoteService extends Service {
         filter.addAction("com.klinker.android.notes.STOP_NOTES");
         registerReceiver(stopNotes, filter);
 
+        SchoolClass mClass = Utils.getCurrentClass(mContext);
+
+        // makes the notification for the foreground service
         Notification notification = new Notification(R.drawable.ic_launcher, getResources().getString(R.string.app_name),
                 System.currentTimeMillis());
         Intent notificationIntent = new Intent(this, BrowserActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-        notification.setLatestEventInfo(this, getResources().getString(R.string.app_name),
-                "Click to open", pendingIntent);
+        notification.setLatestEventInfo(this, // service
+                getResources().getString(R.string.app_name), // Main title
+                mClass.getName(), // notification content
+                pendingIntent); // intent to be called when clicked
 
-        // because ice cream sandwhich doesn't support this
+        // because ice cream sandwhich doesn't support this functionality
+        // this will hide the notification from the status bar. It will only be visible when
+        // pulling down the notification tray
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             notification.priority = Notification.PRIORITY_MIN;
         }
@@ -119,6 +130,7 @@ public class OverNoteService extends Service {
                         case MotionEvent.ACTION_DOWN:
 
                             // Vibrate
+                            v.vibrate(200);
 
                             return true;
 
@@ -132,8 +144,6 @@ public class OverNoteService extends Service {
                             return true;
 
                         case MotionEvent.ACTION_UP:
-
-                            // set the view
 
                             return true;
                     }
@@ -266,12 +276,17 @@ public class OverNoteService extends Service {
                 // makes sure they aren't blank
                 if (name.getText().length() > 0 && content.getText().length() > 0) {
                     // save has been clicked. we want to save the data, then simulate a discard clicked
-
+                    
                     // use a thread so that the io doesn't clog up the ui thread
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            IOUtils.writeFile(mContext, content.getText().toString(), name.getText().toString());
+                            // formats the string so it can be read in a nicer way in our app
+                            String text = content.getText().toString();
+                            text = text.replaceAll("\n\n", "\n");
+                            text = text.replaceAll("\n", "\n_[0]_");
+
+                            IOUtils.writeFile(mContext, text, name.getText().toString());
                         }
                     }).start();
 
@@ -287,6 +302,7 @@ public class OverNoteService extends Service {
 
     /**
      * Binds the service
+     * We don't do anything here, but it must be impemented for the service
      *
      * @param intent
      * @return
