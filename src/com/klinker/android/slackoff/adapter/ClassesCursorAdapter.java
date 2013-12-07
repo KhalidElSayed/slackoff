@@ -18,6 +18,7 @@ import com.klinker.android.slackoff.service.OverNoteService;
 import com.klinker.android.slackoff.sql.SchoolData;
 import com.klinker.android.slackoff.sql.SchoolHelper;
 import com.klinker.android.slackoff.utils.IOUtils;
+import com.klinker.android.slackoff.utils.Utils;
 
 import java.util.Date;
 
@@ -247,7 +248,14 @@ public class ClassesCursorAdapter extends CursorAdapter {
                 data.close(); // closes the database
 
                 // close down the overnote service if it is running for this class
+                Date classStart = new Date(mStart);
+                Date classEnd = new Date(mEnd);
+                Date current = new Date();
 
+                if (classEnd.after(current) && classStart.before(current)) { // the class is going on right now
+                    Intent kill = new Intent("com.klinker.android.notes.STOP_NOTES");
+                    mContext.sendBroadcast(kill);
+                }
 
                 // cancels the alarms by recreating the same pending intent, then using the alarm manager to cancel it
                 AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
