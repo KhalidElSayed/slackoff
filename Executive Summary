@@ -1,0 +1,16 @@
+Executive Summary:
+
+	This app was created for the "multitasker", or more specifically, the slacker in class, always sitting on their phones, playing their games, and not listening to the professor unless something very important comes up. We have all done it before and will do it again, but now, we don't have to worry about missing that important topic or point! Introducing SlackOff, the note keeper that is always at your fingertips when you need it most!
+
+	Features:
+	- File structure browsing for quick access to any of your classes or notes
+	- Schedule classes for the semester and let our app manage the times, what's coming up, and the organization
+	- Create and check off items in our custom note viewer interface
+	- Don't miss an important point in class while your head is at the screen with our OverNote service
+		- Conveniently comes up whenever you have an ongoing class
+	- View your notes from other file browsers with our custom ".klink" file extension that will redirect you to our note viewer when opened
+	- Add new folders and files easily from the Action Bar
+	- Rename or delete a folder or note easily with a long click
+	- Attach pictures to your notes
+
+	Never worry about missing those important points or forgetting about an assignment again! Our note app was created by students for students, because we know how often they are on their phones during class, not paying attention and only catching the quick, "this will be on the test!" keyboard.
