@@ -1,11 +1,73 @@
-Here are some topics to talk about:
+    SlackOff was created for the Android system using Google’s public Android APIs. This includes using resources such as
+icons from their official developer icon packs and colors from their published color palletes. These resources can
+all be found at http://developer.android.com/. Running said application is simple, just build and install the .apk file
+generated to your device and follow user documentation for setup.
 
-- SQL databases
-- Windowed feature
-- ListView
-- Nav Drawer
-- Broadcast
-- Services
-- Adapters
-- Click Listeners
-- IO Stuff
+    The development consisted of 3 separate parts to create the full app:
+
+                1)	The file browser
+                2)	The popup up note
+                3)	The note editor
+
+    First, the file browser was developed to be able to view all note files created in the app. This section of the
+app is basically just a simple Android file browser which has access to all files on your SD card, but we restricted
+its usage to only viewing notes files and folders so as to keep things simple. It can be reverted to its original,
+full file browser state with just a few simple line changes. This browser acts as a single activity which can be
+passed a root file in through the intent (if none is passed then the default root is used). It then reads in all
+folders and files contained in that root file and displays everything that I want it to, separated into two different
+ListViews which are stacked on top of each other. Clicking on a file creates an intent to open that specific mimetype,
+clicking on a folder launches another browser activity that is sent the file we just clicked on as the root.
+Simple file browsing and nothing more.
+
+    The second part of the app is the popup note which we created. To do this, we had to create a service which had the
+SYSTEM_ALERT_WINDOW permission available. This service then gets the window manager, inflates our layout to show from
+is resource id and draws that to the screen. It’s a complicated process to this this, mainly involving creating custom
+views and managing the window manually instead of letting the Android system do it for us. We are able to save notes
+to the current class that a student is in through this note, along with a title and any other information relevant to
+the note and based on the specs of the .klink file which we have created (mimetype: file/klink) which will be explained
+further down in this documentation (in its essence, it is simply a text file with some formatting applied so that we
+can determine things like new lines, check boxes, and images). This alert window is controlled and shown on screen only
+when a user has entered a class into the main browser activity (by pulling open the drawer in the root directory) and
+then enters their class schedule which is saved into a simple SQLite database we created to hold the data. Once all
+classes have been registered, there is an alarm manager that is created to control when the popup note service should
+wake up (only during classes so that it stays out of the way otherwise). The alarm manager sends a broadcast throughout
+the system which is then picked up by SlackOff, signifying the note should be shown on top of whatever the user is
+currently doing.
+
+    The third and final part of the application is a simple note editor which is called by any intent trying to access
+.klink files (file/klink mimetype). This is registered in the application’s manifest so that any application can take
+advantage of the activity, meaning that other file browsers that have access to the storage system can open .klink
+files as they would with any other file and it is then opened in SlackOff where the note can be edited and resaved.
+The general form of the note editor is a simple title at the top, followed by a listview containing all of the notes
+in the middle, fed through an adapter to interpret the data, and at the bottom is a footer which is used to insert a
+new line at the bottom or to add a picture to the current note. The activity first reads in the characters at the
+beginning of the file to determine if checkboxes should be shown or not in the note, then it reads in all of the note
+lines and displays them accordingly (checkboxes are parse and and displayed correctly, images are parsed from
+<img></img> tags, loaded and displayed in the list, and the garbage can icon is displayed so a line can be easily
+removed when a view is focused on). Clicking on the attach button at the bottom will open a chooser to pick an image
+off of your device which will be inserted. The add line button at the bottom adds a new line to the notes object
+holding all notes and then notifies the array adapter that the data has changed so that it can be reloaded with
+this new line at the bottom. A save button has also been added to the action bar so that notes can easily be saved
+(clicking on the title in the actionbar to go back or clicking the back button also save the note). The notes are
+then written to the internal memory of the device with a simple IO process.
+
+    The following is a specification for a .klink file (file/klink) which will be opened and shown in the notes activity.
+To begin the note, either a -[0]- or a -[1]- is added before anything else, signifying whether checkboxes should be
+shown or not (0 being not and 1 being yes). After that, the title should be added directly after the check box marker
+(on the same line). The following is an example of showing checkboxes with the title “Test Note”.
+
+                    -[1]-Test Note
+
+    After setting up the title, add 3 returns right underneath it (“\n\n\n”), you can then start recording notes lines.
+Each note line should start with either _[0]_ or _[1]_ to signify whether or not that line is checked (0 being
+unchecked, 1 being checked). You may add as many of these lines as you wish, just separate them with returns (“\n”).
+To add an image to a line, simply add the images name (which must reside within the same parent file as the note) in
+between image tags. The following is an example of what a few notes lines strung together may look like.
+
+                    _[0]_This is note line one
+                    _[1]_This is checked note line number 2
+                    _[1]_This line is also checked
+                    _[0]_<img>0010142.jpg</img>
+
+    Save this document with the file extension .klink and it will be openable and editable with any application that
+supports such a file type, namely SlackOff.
